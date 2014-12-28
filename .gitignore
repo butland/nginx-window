@@ -22,3 +22,5 @@ Debug/rc*.tlog
 Debug/rc*.tlog
 Debug/rc.write.1.tlog
 debug/desktop.ini
+lua-nginx-module-0.9.13/.gitignore
+ngx_devel_kit-0.2.19/.gitignore
