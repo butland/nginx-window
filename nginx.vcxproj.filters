@@ -756,6 +756,9 @@
     <ClCompile Include="lua-5.1.5\src\bit.c">
       <Filter>lua</Filter>
     </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\luaiconv.c">
+      <Filter>lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ngx_auto_config.h">

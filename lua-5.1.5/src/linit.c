@@ -24,6 +24,7 @@ static const luaL_Reg lualibs[] = {
   {LUA_MATHLIBNAME, luaopen_math},
   {LUA_DBLIBNAME, luaopen_debug},
   {LUA_BITNAME, luaopen_bit},
+  {LIB_ICONVNAME, luaopen_iconv},
   {NULL, NULL}
 };
 

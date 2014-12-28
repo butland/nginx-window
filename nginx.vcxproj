@@ -55,7 +55,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>./lua-nginx-module-0.9.13/src/api;./lua-5.1.5/src;./lua-nginx-module-0.9.13/src;.;./pcre-8.12;./zlib;./core;./os/win32;./event;./event/modules;./http;./http/modules;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./libiconv-1.9.1.bin.woe32/include;./lua-nginx-module-0.9.13/src/api;./lua-5.1.5/src;./lua-nginx-module-0.9.13/src;.;./pcre-8.12;./zlib;./core;./os/win32;./event;./event/modules;./http;./http/modules;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;HAVE_CONFIG_H;NO_SYS_TYPES_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -67,8 +67,8 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>advapi32.lib;ws2_32.lib;libeay32.lib;ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>./lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>charset.lib;iconv.lib;advapi32.lib;ws2_32.lib;libeay32.lib;ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./lib;%(AdditionalLibraryDirectories);./libiconv-1.9.1.bin.woe32/lib;</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -131,6 +131,7 @@
     <ClCompile Include="lua-5.1.5\src\ltm.c" />
     <ClCompile Include="lua-5.1.5\src\lua.c" />
     <ClCompile Include="lua-5.1.5\src\luac.c" />
+    <ClCompile Include="lua-5.1.5\src\luaiconv.c" />
     <ClCompile Include="lua-5.1.5\src\lundump.c" />
     <ClCompile Include="lua-5.1.5\src\lvm.c" />
     <ClCompile Include="lua-5.1.5\src\lzio.c" />
