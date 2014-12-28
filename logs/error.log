@@ -1,4 +1,0 @@
-2013/12/05 16:17:13 [error] 3424#5648: *1 CreateFile() "html/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost"
-2014/12/27 10:40:54 [alert] 14080#4636: worker process 13944 exited with code 3
-2014/12/28 13:44:02 [alert] 12124#6484: worker process 13400 exited with code 80000003
-2014/12/28 13:48:26 [alert] 13548#11256: worker process 7912 exited with code 80000003
