@@ -1,0 +1,40 @@
+pcre_get.lo: pcre_get.c config.h pcre_internal.h \
+ c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/ctype.h \
+ c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/_mingw.h \
+ c:\mingw\bin\../lib/gcc/mingw32/4.5.2/include/stddef.h \
+ c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/limits.h \
+ c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/stdio.h \
+ c:\mingw\bin\../lib/gcc/mingw32/4.5.2/include/stdarg.h \
+ c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/sys/types.h \
+ c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/stdlib.h \
+ c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/string.h \
+ c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/stdint.h \
+ pcre.h ucp.h
+
+config.h:
+
+pcre_internal.h:
+
+c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/ctype.h:
+
+c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/_mingw.h:
+
+c:\mingw\bin\../lib/gcc/mingw32/4.5.2/include/stddef.h:
+
+c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/limits.h:
+
+c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/stdio.h:
+
+c:\mingw\bin\../lib/gcc/mingw32/4.5.2/include/stdarg.h:
+
+c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/sys/types.h:
+
+c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/stdlib.h:
+
+c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/string.h:
+
+c:\mingw\bin\../lib/gcc/mingw32/4.5.2/../../../../include/stdint.h:
+
+pcre.h:
+
+ucp.h:

@@ -1,0 +1,1249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{813061f4-0a37-4d32-b3dc-32289cbd3192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="event">
+      <UniqueIdentifier>{7ea7a245-535b-404e-970a-0af47d99397b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="event\modules">
+      <UniqueIdentifier>{a63131a5-53f3-4682-9156-65eca064f3c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="os">
+      <UniqueIdentifier>{70a68524-e085-4329-aad1-e4932dd64628}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="os\win32">
+      <UniqueIdentifier>{f317f41e-3928-4cb1-97c8-e5c728585f9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="http">
+      <UniqueIdentifier>{c95ca996-bdc3-4ca4-b17b-aa242408a579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="http\modules">
+      <UniqueIdentifier>{b13e5f8c-12fe-4b05-815f-99c1a35b6f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zlib">
+      <UniqueIdentifier>{c71d43ba-1b08-4c97-92bb-2917d6f93739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pcre">
+      <UniqueIdentifier>{f862b65b-9529-4cad-9fcd-3d57d5470595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ngx_lua">
+      <UniqueIdentifier>{9e1db7aa-7d75-41b4-9785-744c1de33462}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ngx_lua\api">
+      <UniqueIdentifier>{cd0f17e4-2cf4-414c-8280-86abe9031349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{e14d553e-4505-418d-a87d-f105f6774293}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ngx_modules.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="core\nginx.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_array.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_buf.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_conf_file.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_connection.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_cpuinfo.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_crc32.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_crypt.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_cycle.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_file.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_hash.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_inet.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_list.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_log.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_md5.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_murmurhash.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_open_file_cache.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_output_chain.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_palloc.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_parse.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_queue.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_radix_tree.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_rbtree.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_regex.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_resolver.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_shmtx.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_slab.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_spinlock.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_string.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_times.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="event\ngx_event.c">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="event\ngx_event_accept.c">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="event\ngx_event_acceptex.c">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="event\ngx_event_busy_lock.c">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="event\ngx_event_connect.c">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="event\ngx_event_mutex.c">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="event\ngx_event_pipe.c">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="event\ngx_event_posted.c">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="event\ngx_event_timer.c">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="event\ngx_event_openssl.c">
+      <Filter>event\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="event\modules\ngx_iocp_module.c">
+      <Filter>event\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="event\modules\ngx_win32_select_module.c">
+      <Filter>event\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_alloc.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_errno.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_event_log.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_files.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_process.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_process_cycle.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_shmem.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_socket.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_stat.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_thread.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_time.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_udp_wsarecv.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_user.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_win32_init.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_wsarecv.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_wsarecv_chain.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_wsasend.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="os\win32\ngx_wsasend_chain.c">
+      <Filter>os\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_busy_lock.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_copy_filter_module.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_core_module.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_file_cache.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_header_filter_module.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_parse.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_parse_time.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_postpone_filter_module.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_request.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_request_body.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_script.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_special_response.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_upstream.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_upstream_round_robin.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_variables.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_write_filter_module.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_access_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_addition_filter_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_auth_basic_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_autoindex_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_browser_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_charset_filter_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_chunked_filter_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_degradation_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_empty_gif_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_fastcgi_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_flv_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_geo_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_gzip_filter_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_gzip_static_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_headers_filter_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_index_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_limit_req_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_limit_zone_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_log_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_map_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_memcached_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_not_modified_filter_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_proxy_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_random_index_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_range_filter_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_referer_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_rewrite_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_scgi_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_secure_link_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_split_clients_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_ssi_filter_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_ssl_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_static_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_sub_filter_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_upstream_ip_hash_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_userid_filter_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_uwsgi_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\adler32.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\compress.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\crc32.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\deflate.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzclose.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzlib.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzread.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\gzwrite.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\infback.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inffast.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inflate.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\inftrees.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\trees.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\uncompr.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="zlib\zutil.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_chartables.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_compile.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_config.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_dfa_exec.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_exec.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_fullinfo.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_get.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_globals.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_info.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_maketables.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_newline.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_ord2utf8.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_refcount.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_scanner.cc">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_stringpiece.cc">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_study.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_tables.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_try_flipped.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_ucd.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_valid_utf8.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_version.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcre_xclass.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcrecpp.cc">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre-8.12\pcreposix.c">
+      <Filter>pcre</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_accessby.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_api.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_args.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_bodyfilterby.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_cache.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_capturefilter.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_clfactory.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_config.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_consts.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_contentby.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_control.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_coroutine.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_ctx.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_directive.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_exception.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_headerfilterby.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_headers.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_headers_in.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_headers_out.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_initby.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_initworkerby.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_log.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_logby.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_misc.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_module.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_ndk.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_output.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_pcrefix.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_phase.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_regex.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_req_body.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_req_method.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_rewriteby.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_script.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_setby.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_shdict.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_sleep.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_socket_tcp.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_socket_udp.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_string.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_subrequest.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_time.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_timer.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_uri.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_uthread.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_util.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_variable.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_worker.c">
+      <Filter>ngx_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lapi.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lauxlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lbaselib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lcode.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ldblib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ldebug.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ldo.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ldump.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lfunc.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lgc.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\linit.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\liolib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\llex.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lmathlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lmem.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\loadlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lobject.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lopcodes.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\loslib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lparser.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lstate.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lstring.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lstrlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ltable.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ltablib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ltm.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lua.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\luac.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lundump.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lvm.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lzio.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\print.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\bit.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ngx_auto_config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ngx_auto_headers.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="core\nginx.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_array.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_buf.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_conf_file.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_config.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_connection.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_core.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_crc.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_crc32.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_crypt.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_cycle.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_file.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_hash.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_inet.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_list.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_log.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_md5.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_murmurhash.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_open_file_cache.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_palloc.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_parse.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_queue.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_radix_tree.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_rbtree.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_regex.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_resolver.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_sha1.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_shmtx.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_slab.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_string.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_times.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="event\ngx_event.h">
+      <Filter>event</Filter>
+    </ClInclude>
+    <ClInclude Include="event\ngx_event_busy_lock.h">
+      <Filter>event</Filter>
+    </ClInclude>
+    <ClInclude Include="event\ngx_event_pipe.h">
+      <Filter>event</Filter>
+    </ClInclude>
+    <ClInclude Include="event\ngx_event_posted.h">
+      <Filter>event</Filter>
+    </ClInclude>
+    <ClInclude Include="event\ngx_event_timer.h">
+      <Filter>event</Filter>
+    </ClInclude>
+    <ClInclude Include="event\modules\ngx_iocp_module.h">
+      <Filter>event\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_alloc.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_atomic.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_errno.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_files.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_os.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_process.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_process_cycle.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_shmem.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_socket.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_thread.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_time.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_user.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="os\win32\ngx_win32_config.h">
+      <Filter>os\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="http\ngx_http.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\ngx_http_busy_lock.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\ngx_http_cache.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\ngx_http_config.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\ngx_http_core_module.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\ngx_http_request.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\ngx_http_script.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\ngx_http_upstream.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\ngx_http_upstream_round_robin.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\ngx_http_variables.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\modules\ngx_http_ssi_filter_module.h">
+      <Filter>http\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="http\modules\ngx_http_ssl_module.h">
+      <Filter>http\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\crc32.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\deflate.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\gzguts.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffast.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inffixed.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inflate.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\inftrees.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\trees.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zconf.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zlib.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib\zutil.h">
+      <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre-8.12\config.h">
+      <Filter>pcre</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre-8.12\pcre.h">
+      <Filter>pcre</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre-8.12\pcre_internal.h">
+      <Filter>pcre</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre-8.12\pcre_scanner.h">
+      <Filter>pcre</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre-8.12\pcre_stringpiece.h">
+      <Filter>pcre</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre-8.12\pcrecpp.h">
+      <Filter>pcre</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre-8.12\pcrecpp_internal.h">
+      <Filter>pcre</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre-8.12\pcrecpparg.h">
+      <Filter>pcre</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre-8.12\pcreposix.h">
+      <Filter>pcre</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre-8.12\ucp.h">
+      <Filter>pcre</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ddebug.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_accessby.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_args.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_bodyfilterby.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_cache.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_capturefilter.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_clfactory.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_common.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_config.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_consts.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_contentby.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_control.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_coroutine.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_ctx.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_directive.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_exception.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_headerfilterby.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_headers.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_headers_in.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_headers_out.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_initby.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_initworkerby.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_log.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_logby.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_misc.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_ndk.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_output.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_pcrefix.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_phase.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_probe.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_regex.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_req_body.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_req_method.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_rewriteby.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_script.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_setby.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_shdict.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_sleep.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_socket_tcp.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_socket_udp.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_string.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_subrequest.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_time.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_timer.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_uri.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_uthread.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_util.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_variable.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\ngx_http_lua_worker.h">
+      <Filter>ngx_lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-nginx-module-0.9.13\src\api\ngx_http_lua_api.h">
+      <Filter>ngx_lua\api</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lapi.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lauxlib.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lcode.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\ldebug.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\ldo.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lfunc.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lgc.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\llex.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\llimits.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lmem.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lobject.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lopcodes.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lparser.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lstate.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lstring.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\ltable.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\ltm.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lua.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\luaconf.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lualib.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lundump.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lvm.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lzio.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="os\win32\nginx.ico">
+      <Filter>os\win32</Filter>
+    </None>
+    <None Include="lua-5.1.5\src\Makefile">
+      <Filter>lua</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="os\win32\nginx.rc">
+      <Filter>os\win32</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
