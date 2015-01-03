@@ -82,6 +82,10 @@ ngx_create_listening(ngx_conf_t *cf, void *sockaddr, socklen_t socklen)
     ls->setfib = -1;
 #endif
 
+#if (NGX_HAVE_TCP_FASTOPEN)
+    ls->fastopen = -1;
+#endif
+
     return ls;
 }
 
@@ -93,8 +97,10 @@ ngx_set_inherited_sockets(ngx_cycle_t *cycle)
     ngx_uint_t                 i;
     ngx_listening_t           *ls;
     socklen_t                  olen;
-#if (NGX_HAVE_DEFERRED_ACCEPT && defined SO_ACCEPTFILTER)
+#if (NGX_HAVE_DEFERRED_ACCEPT)
     ngx_err_t                  err;
+#endif
+#if (NGX_HAVE_DEFERRED_ACCEPT && defined SO_ACCEPTFILTER)
     struct accept_filter_arg   af;
 #endif
 #if (NGX_HAVE_DEFERRED_ACCEPT && defined TCP_DEFER_ACCEPT)
@@ -207,6 +213,21 @@ ngx_set_inherited_sockets(ngx_cycle_t *cycle)
 #endif
 #endif
 
+#if (NGX_HAVE_TCP_FASTOPEN)
+
+        if (getsockopt(ls[i].fastopen, IPPROTO_TCP, TCP_FASTOPEN,
+                       (void *) &ls[i].fastopen, &olen)
+            == -1)
+        {
+            ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_socket_errno,
+                          "getsockopt(TCP_FASTOPEN) %V failed, ignored",
+                          &ls[i].addr_text);
+
+            ls[i].fastopen = -1;
+        }
+
+#endif
+
 #if (NGX_HAVE_DEFERRED_ACCEPT && defined SO_ACCEPTFILTER)
 
         ngx_memzero(&af, sizeof(struct accept_filter_arg));
@@ -248,7 +269,13 @@ ngx_set_inherited_sockets(ngx_cycle_t *cycle)
         if (getsockopt(ls[i].fd, IPPROTO_TCP, TCP_DEFER_ACCEPT, &timeout, &olen)
             == -1)
         {
-            ngx_log_error(NGX_LOG_NOTICE, cycle->log, ngx_errno,
+            err = ngx_errno;
+
+            if (err == NGX_EOPNOTSUPP) {
+                continue;
+            }
+
+            ngx_log_error(NGX_LOG_NOTICE, cycle->log, err,
                           "getsockopt(TCP_DEFER_ACCEPT) for %V failed, ignored",
                           &ls[i].addr_text);
             continue;
@@ -570,6 +597,19 @@ ngx_configure_listening_sockets(ngx_cycle_t *cycle)
                 ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_socket_errno,
                               "setsockopt(SO_SETFIB, %d) %V failed, ignored",
                               ls[i].setfib, &ls[i].addr_text);
+            }
+        }
+#endif
+
+#if (NGX_HAVE_TCP_FASTOPEN)
+        if (ls[i].fastopen != -1) {
+            if (setsockopt(ls[i].fd, IPPROTO_TCP, TCP_FASTOPEN,
+                           (const void *) &ls[i].fastopen, sizeof(int))
+                == -1)
+            {
+                ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_socket_errno,
+                              "setsockopt(TCP_FASTOPEN, %d) %V failed, ignored",
+                              ls[i].fastopen, &ls[i].addr_text);
             }
         }
 #endif
@@ -1038,12 +1078,15 @@ ngx_connection_local_sockaddr(ngx_connection_t *c, ngx_str_t *s,
     struct sockaddr_in6  *sin6;
 #endif
 
+    if (c->local_socklen == 0) {
+        return NGX_ERROR;
+    }
+
     switch (c->local_sockaddr->sa_family) {
 
 #if (NGX_HAVE_INET6)
     case AF_INET6:
         sin6 = (struct sockaddr_in6 *) c->local_sockaddr;
-        len = sizeof(struct sockaddr_in6);
 
         for (addr = 0, i = 0; addr == 0 && i < 16; i++) {
             addr |= sin6->sin6_addr.s6_addr[i];
@@ -1052,9 +1095,14 @@ ngx_connection_local_sockaddr(ngx_connection_t *c, ngx_str_t *s,
         break;
 #endif
 
+#if (NGX_HAVE_UNIX_DOMAIN)
+    case AF_UNIX:
+        addr = 1;
+        break;
+#endif
+
     default: /* AF_INET */
         sin = (struct sockaddr_in *) c->local_sockaddr;
-        len = sizeof(struct sockaddr_in);
         addr = sin->sin_addr.s_addr;
         break;
     }
@@ -1074,13 +1122,16 @@ ngx_connection_local_sockaddr(ngx_connection_t *c, ngx_str_t *s,
         }
 
         ngx_memcpy(c->local_sockaddr, &sa, len);
+
+        c->local_socklen = len;
     }
 
     if (s == NULL) {
         return NGX_OK;
     }
 
-    s->len = ngx_sock_ntop(c->local_sockaddr, len, s->data, s->len, port);
+    s->len = ngx_sock_ntop(c->local_sockaddr, c->local_socklen,
+                           s->data, s->len, port);
 
     return NGX_OK;
 }

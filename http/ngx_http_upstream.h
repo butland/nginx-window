@@ -178,6 +178,8 @@ typedef struct {
     ngx_flag_t                       cache_lock;
     ngx_msec_t                       cache_lock_timeout;
 
+    ngx_flag_t                       cache_revalidate;
+
     ngx_array_t                     *cache_valid;
     ngx_array_t                     *cache_bypass;
     ngx_array_t                     *no_cache;
@@ -254,7 +256,7 @@ typedef struct {
     ngx_uint_t                       no_port; /* unsigned no_port:1 */
 
     ngx_uint_t                       naddrs;
-    in_addr_t                       *addrs;
+    ngx_addr_t                      *addrs;
 
     struct sockaddr                 *sockaddr;
     socklen_t                        socklen;

@@ -1144,7 +1144,9 @@ ngx_http_core_access_phase(ngx_http_request_t *r, ngx_http_phase_handler_t *ph)
         }
 
         if (rc == NGX_HTTP_FORBIDDEN || rc == NGX_HTTP_UNAUTHORIZED) {
-            r->access_code = rc;
+            if (r->access_code != NGX_HTTP_UNAUTHORIZED) {
+                r->access_code = rc;
+            }
 
             r->phase_handler++;
             return NGX_AGAIN;
@@ -3039,6 +3041,9 @@ ngx_http_core_server(ngx_conf_t *cf, ngx_command_t *cmd, void *dummy)
 #if (NGX_HAVE_SETFIB)
         lsopt.setfib = -1;
 #endif
+#if (NGX_HAVE_TCP_FASTOPEN)
+        lsopt.fastopen = -1;
+#endif
         lsopt.wildcard = 1;
 
         (void) ngx_sock_ntop(&lsopt.u.sockaddr, lsopt.socklen, lsopt.addr,
@@ -3987,6 +3992,9 @@ ngx_http_core_listen(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 #if (NGX_HAVE_SETFIB)
     lsopt.setfib = -1;
 #endif
+#if (NGX_HAVE_TCP_FASTOPEN)
+    lsopt.fastopen = -1;
+#endif
     lsopt.wildcard = u.wildcard;
 #if (NGX_HAVE_INET6 && defined IPV6_V6ONLY)
     lsopt.ipv6only = 1;
@@ -4013,6 +4021,8 @@ ngx_http_core_listen(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 #if (NGX_HAVE_SETFIB)
         if (ngx_strncmp(value[n].data, "setfib=", 7) == 0) {
             lsopt.setfib = ngx_atoi(value[n].data + 7, value[n].len - 7);
+            lsopt.set = 1;
+            lsopt.bind = 1;
 
             if (lsopt.setfib == NGX_ERROR) {
                 ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
@@ -4023,6 +4033,23 @@ ngx_http_core_listen(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
             continue;
         }
 #endif
+
+#if (NGX_HAVE_TCP_FASTOPEN)
+        if (ngx_strncmp(value[n].data, "fastopen=", 9) == 0) {
+            lsopt.fastopen = ngx_atoi(value[n].data + 9, value[n].len - 9);
+            lsopt.set = 1;
+            lsopt.bind = 1;
+
+            if (lsopt.fastopen == NGX_ERROR) {
+                ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
+                                   "invalid fastopen \"%V\"", &value[n]);
+                return NGX_CONF_ERROR;
+            }
+
+            continue;
+        }
+#endif
+
         if (ngx_strncmp(value[n].data, "backlog=", 8) == 0) {
             lsopt.backlog = ngx_atoi(value[n].data + 8, value[n].len - 8);
             lsopt.set = 1;
