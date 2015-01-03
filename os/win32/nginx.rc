@@ -3,4 +3,4 @@
 // Copyright (C) Nginx, Inc.
 
 
-nginx   icon  discardable  "os\\win32\\nginx.ico"
+nginx   icon  discardable  "src\\os\\win32\\nginx.ico"
