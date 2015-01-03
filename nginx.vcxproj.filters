@@ -786,6 +786,9 @@
     <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_worker.c">
       <Filter>ngx_lua</Filter>
     </ClCompile>
+    <ClCompile Include="core\ngx_proxy_protocol.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ngx_auto_config.h">
@@ -1273,6 +1276,9 @@
     </ClInclude>
     <ClInclude Include="lua-nginx-module-0.9.13\src\api\ngx_http_lua_api.h">
       <Filter>ngx_lua\api</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_proxy_protocol.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

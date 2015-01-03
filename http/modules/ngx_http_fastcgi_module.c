@@ -1208,6 +1208,10 @@ ngx_http_fastcgi_reinit_request(ngx_http_request_t *r)
     f->fastcgi_stdout = 0;
     f->large_stderr = 0;
 
+    if (f->split_parts) {
+        f->split_parts->nelts = 0;
+    }
+
     r->state = 0;
 
     return NGX_OK;
@@ -1488,6 +1492,13 @@ ngx_http_fastcgi_process_header(ngx_http_request_t *r)
 
                     rc = ngx_http_parse_header_line(r, &buf, 1);
 
+                    if (rc != NGX_OK) {
+                        ngx_log_error(NGX_LOG_ALERT, r->connection->log, 0,
+                                      "invalid header after joining "
+                                      "FastCGI records");
+                        return NGX_ERROR;
+                    }
+
                     h->key.len = r->header_name_end - r->header_name_start;
                     h->key.data = r->header_name_start;
                     h->key.data[h->key.len] = '\0';
@@ -1584,7 +1595,7 @@ ngx_http_fastcgi_process_header(ngx_http_request_t *r)
                     ngx_str_set(&u->headers_in.status_line, "200 OK");
                 }
 
-                if (u->state) {
+                if (u->state && u->state->status == 0) {
                     u->state->status = u->headers_in.status_n;
                 }
 

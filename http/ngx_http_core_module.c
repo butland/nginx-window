@@ -2632,6 +2632,14 @@ ngx_http_named_location(ngx_http_request_t *r, ngx_str_t *name)
         return NGX_DONE;
     }
 
+    if (r->uri.len == 0) {
+        ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
+                      "empty URI in redirect to named location \"%V\"", name);
+
+        ngx_http_finalize_request(r, NGX_HTTP_INTERNAL_SERVER_ERROR);
+        return NGX_DONE;
+    }
+
     cscf = ngx_http_get_module_srv_conf(r, ngx_http_core_module);
 
     if (cscf->named_locations) {
@@ -3424,25 +3432,16 @@ ngx_http_core_init_main_conf(ngx_conf_t *cf, void *conf)
 {
     ngx_http_core_main_conf_t *cmcf = conf;
 
-    if (cmcf->server_names_hash_max_size == NGX_CONF_UNSET_UINT) {
-        cmcf->server_names_hash_max_size = 512;
-    }
-
-    if (cmcf->server_names_hash_bucket_size == NGX_CONF_UNSET_UINT) {
-        cmcf->server_names_hash_bucket_size = ngx_cacheline_size;
-    }
+    ngx_conf_init_uint_value(cmcf->server_names_hash_max_size, 512);
+    ngx_conf_init_uint_value(cmcf->server_names_hash_bucket_size,
+                             ngx_cacheline_size);
 
     cmcf->server_names_hash_bucket_size =
             ngx_align(cmcf->server_names_hash_bucket_size, ngx_cacheline_size);
 
 
-    if (cmcf->variables_hash_max_size == NGX_CONF_UNSET_UINT) {
-        cmcf->variables_hash_max_size = 512;
-    }
-
-    if (cmcf->variables_hash_bucket_size == NGX_CONF_UNSET_UINT) {
-        cmcf->variables_hash_bucket_size = 64;
-    }
+    ngx_conf_init_uint_value(cmcf->variables_hash_max_size, 1024);
+    ngx_conf_init_uint_value(cmcf->variables_hash_bucket_size, 64);
 
     cmcf->variables_hash_bucket_size =
                ngx_align(cmcf->variables_hash_bucket_size, ngx_cacheline_size);
@@ -3711,8 +3710,7 @@ ngx_http_core_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child)
                               prev->types_hash_max_size, 1024);
 
     ngx_conf_merge_uint_value(conf->types_hash_bucket_size,
-                              prev->types_hash_bucket_size,
-                              ngx_cacheline_size);
+                              prev->types_hash_bucket_size, 64);
 
     conf->types_hash_bucket_size = ngx_align(conf->types_hash_bucket_size,
                                              ngx_cacheline_size);
@@ -4277,6 +4275,11 @@ ngx_http_core_listen(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
                                &value[n].data[13]);
             return NGX_CONF_ERROR;
 #endif
+        }
+
+        if (ngx_strcmp(value[n].data, "proxy_protocol") == 0) {
+            lsopt.proxy_protocol = 1;
+            continue;
         }
 
         ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,

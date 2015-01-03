@@ -101,6 +101,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="core\ngx_proxy_protocol.c" />
     <ClCompile Include="event\ngx_event_openssl_stapling.c" />
     <ClCompile Include="http\modules\ngx_http_auth_request_module.c" />
     <ClCompile Include="http\modules\ngx_http_gunzip_filter_module.c" />
@@ -351,6 +352,7 @@
     <ClCompile Include="pcre-8.12\pcreposix.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\ngx_proxy_protocol.h" />
     <ClInclude Include="event\ngx_event_connect.h" />
     <ClInclude Include="event\ngx_event_openssl.h" />
     <ClInclude Include="http\ngx_http_spdy.h" />

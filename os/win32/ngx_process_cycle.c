@@ -881,8 +881,8 @@ ngx_worker_process_exit(ngx_cycle_t *cycle)
                 && !c[i].read->resolver)
             {
                 ngx_log_error(NGX_LOG_ALERT, cycle->log, 0,
-                              "open socket #%d left in connection %ui",
-                              c[i].fd, i);
+                              "*%uA open socket #%d left in connection %ui",
+                              c[i].number, c[i].fd, i);
             }
         }
     }
@@ -926,7 +926,7 @@ ngx_cache_manager_thread(void *data)
          * ev == WAIT_ABANDONED_0 + 1
          */
 
-        if (ngx_terminate || ngx_quit) {
+        if (ngx_terminate || ngx_quit || ngx_exiting) {
             ngx_log_error(NGX_LOG_NOTICE, cycle->log, 0, "exiting");
             return 0;
         }
@@ -936,7 +936,7 @@ ngx_cache_manager_thread(void *data)
 
     for ( ;; ) {
 
-        if (ngx_terminate || ngx_quit) {
+        if (ngx_terminate || ngx_quit || ngx_exiting) {
             ngx_log_error(NGX_LOG_NOTICE, cycle->log, 0, "exiting");
             break;
         }
@@ -1005,7 +1005,7 @@ ngx_cache_loader_thread(void *data)
     path = cycle->paths.elts;
     for (i = 0; i < cycle->paths.nelts; i++) {
 
-        if (ngx_terminate || ngx_quit) {
+        if (ngx_terminate || ngx_quit || ngx_exiting) {
             break;
         }
 
