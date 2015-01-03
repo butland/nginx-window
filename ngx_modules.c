@@ -12,16 +12,18 @@ extern ngx_module_t  ngx_event_core_module;
 extern ngx_module_t  ngx_iocp_module;
 extern ngx_module_t  ngx_select_module;
 extern ngx_module_t  ngx_openssl_module;
+extern ngx_module_t  ngx_regex_module;
 extern ngx_module_t  ngx_http_module;
 extern ngx_module_t  ngx_http_core_module;
 extern ngx_module_t  ngx_http_log_module;
 extern ngx_module_t  ngx_http_upstream_module;
+extern ngx_module_t  ngx_http_spdy_module;
 extern ngx_module_t  ngx_http_static_module;
 extern ngx_module_t  ngx_http_autoindex_module;
 extern ngx_module_t  ngx_http_index_module;
 extern ngx_module_t  ngx_http_auth_basic_module;
 extern ngx_module_t  ngx_http_access_module;
-extern ngx_module_t  ngx_http_limit_zone_module;
+extern ngx_module_t  ngx_http_limit_conn_module;
 extern ngx_module_t  ngx_http_limit_req_module;
 extern ngx_module_t  ngx_http_geo_module;
 extern ngx_module_t  ngx_http_map_module;
@@ -37,9 +39,12 @@ extern ngx_module_t  ngx_http_memcached_module;
 extern ngx_module_t  ngx_http_empty_gif_module;
 extern ngx_module_t  ngx_http_browser_module;
 extern ngx_module_t  ngx_http_upstream_ip_hash_module;
+extern ngx_module_t  ngx_http_upstream_least_conn_module;
+extern ngx_module_t  ngx_http_upstream_keepalive_module;
 extern ngx_module_t  ngx_http_write_filter_module;
 extern ngx_module_t  ngx_http_header_filter_module;
 extern ngx_module_t  ngx_http_chunked_filter_module;
+extern ngx_module_t  ngx_http_spdy_filter_module;
 extern ngx_module_t  ngx_http_range_header_filter_module;
 extern ngx_module_t  ngx_http_gzip_filter_module;
 extern ngx_module_t  ngx_http_postpone_filter_module;
@@ -61,16 +66,18 @@ ngx_module_t *ngx_modules[] = {
     &ngx_iocp_module,
     &ngx_select_module,
     &ngx_openssl_module,
+    &ngx_regex_module,
     &ngx_http_module,
     &ngx_http_core_module,
     &ngx_http_log_module,
     &ngx_http_upstream_module,
+    &ngx_http_spdy_module,
     &ngx_http_static_module,
     &ngx_http_autoindex_module,
     &ngx_http_index_module,
     &ngx_http_auth_basic_module,
     &ngx_http_access_module,
-    &ngx_http_limit_zone_module,
+    &ngx_http_limit_conn_module,
     &ngx_http_limit_req_module,
     &ngx_http_geo_module,
     &ngx_http_map_module,
@@ -86,9 +93,12 @@ ngx_module_t *ngx_modules[] = {
     &ngx_http_empty_gif_module,
     &ngx_http_browser_module,
     &ngx_http_upstream_ip_hash_module,
+    &ngx_http_upstream_least_conn_module,
+    &ngx_http_upstream_keepalive_module,
     &ngx_http_write_filter_module,
     &ngx_http_header_filter_module,
     &ngx_http_chunked_filter_module,
+    &ngx_http_spdy_filter_module,
     &ngx_http_range_header_filter_module,
     &ngx_http_gzip_filter_module,
     &ngx_http_postpone_filter_module,

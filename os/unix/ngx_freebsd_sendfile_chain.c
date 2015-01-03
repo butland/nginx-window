@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -11,13 +12,13 @@
 
 /*
  * Although FreeBSD sendfile() allows to pass a header and a trailer,
- * it can not send a header with a part of the file in one packet until
+ * it cannot send a header with a part of the file in one packet until
  * FreeBSD 5.3.  Besides, over the fast ethernet connection sendfile()
  * may send the partially filled packets, i.e. the 8 file pages may be sent
  * as the 11 full 1460-bytes packets, then one incomplete 324-bytes packet,
  * and then again the 11 full 1460-bytes packets.
  *
- * Threfore we use the TCP_NOPUSH option (similar to Linux's TCP_CORK)
+ * Therefore we use the TCP_NOPUSH option (similar to Linux's TCP_CORK)
  * to postpone the sending - it not only sends a header and the first part of
  * the file in one packet, but also sends the file pages in the full packets.
  *
@@ -106,10 +107,8 @@ ngx_freebsd_sendfile_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
         prev = NULL;
         iov = NULL;
 
-        for (cl = in;
-             cl && header.nelts < IOV_MAX && send < limit;
-             cl = cl->next)
-        {
+        for (cl = in; cl && send < limit; cl = cl->next) {
+
             if (ngx_buf_special(cl->buf)) {
                 continue;
             }
@@ -128,6 +127,10 @@ ngx_freebsd_sendfile_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
                 iov->iov_len += (size_t) size;
 
             } else {
+                if (header.nelts >= IOV_MAX){
+                    break;
+                }
+
                 iov = ngx_array_push(&header);
                 if (iov == NULL) {
                     return NGX_CHAIN_ERROR;
@@ -177,12 +180,12 @@ ngx_freebsd_sendfile_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
 
         if (file) {
 
-            /* create the tailer iovec and coalesce the neighbouring bufs */
+            /* create the trailer iovec and coalesce the neighbouring bufs */
 
             prev = NULL;
             iov = NULL;
 
-            while (cl && header.nelts < IOV_MAX && send < limit) {
+            while (cl && send < limit) {
 
                 if (ngx_buf_special(cl->buf)) {
                     cl = cl->next;
@@ -203,6 +206,10 @@ ngx_freebsd_sendfile_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
                     iov->iov_len += (size_t) size;
 
                 } else {
+                    if (trailer.nelts >= IOV_MAX){
+                        break;
+                    }
+
                     iov = ngx_array_push(&trailer);
                     if (iov == NULL) {
                         return NGX_CHAIN_ERROR;
@@ -246,9 +253,14 @@ ngx_freebsd_sendfile_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
                 }
             }
 
-            hdtr.headers = (struct iovec *) header.elts;
+            /*
+             * sendfile() does unneeded work if sf_hdtr's count is 0,
+             * but corresponding pointer is not NULL
+             */
+
+            hdtr.headers = header.nelts ? (struct iovec *) header.elts: NULL;
             hdtr.hdr_cnt = header.nelts;
-            hdtr.trailers = (struct iovec *) trailer.elts;
+            hdtr.trailers = trailer.nelts ? (struct iovec *) trailer.elts: NULL;
             hdtr.trl_cnt = trailer.nelts;
 
             /*
@@ -356,9 +368,9 @@ ngx_freebsd_sendfile_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
 
         c->sent += sent;
 
-        for (cl = in; cl; cl = cl->next) {
+        for ( /* void */ ; in; in = in->next) {
 
-            if (ngx_buf_special(cl->buf)) {
+            if (ngx_buf_special(in->buf)) {
                 continue;
             }
 
@@ -366,28 +378,28 @@ ngx_freebsd_sendfile_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
                 break;
             }
 
-            size = ngx_buf_size(cl->buf);
+            size = ngx_buf_size(in->buf);
 
             if (sent >= size) {
                 sent -= size;
 
-                if (ngx_buf_in_memory(cl->buf)) {
-                    cl->buf->pos = cl->buf->last;
+                if (ngx_buf_in_memory(in->buf)) {
+                    in->buf->pos = in->buf->last;
                 }
 
-                if (cl->buf->in_file) {
-                    cl->buf->file_pos = cl->buf->file_last;
+                if (in->buf->in_file) {
+                    in->buf->file_pos = in->buf->file_last;
                 }
 
                 continue;
             }
 
-            if (ngx_buf_in_memory(cl->buf)) {
-                cl->buf->pos += (size_t) sent;
+            if (ngx_buf_in_memory(in->buf)) {
+                in->buf->pos += (size_t) sent;
             }
 
-            if (cl->buf->in_file) {
-                cl->buf->file_pos += sent;
+            if (in->buf->in_file) {
+                in->buf->file_pos += sent;
             }
 
             break;
@@ -395,7 +407,7 @@ ngx_freebsd_sendfile_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
 
 #if (NGX_HAVE_AIO_SENDFILE)
         if (c->busy_sendfile) {
-            return cl;
+            return in;
         }
 #endif
 
@@ -409,7 +421,7 @@ ngx_freebsd_sendfile_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
              */
 
             wev->ready = 0;
-            return cl;
+            return in;
         }
 
         if (eintr) {
@@ -418,13 +430,11 @@ ngx_freebsd_sendfile_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
 
         if (!complete) {
             wev->ready = 0;
-            return cl;
+            return in;
         }
 
-        if (send >= limit || cl == NULL) {
-            return cl;
+        if (send >= limit || in == NULL) {
+            return in;
         }
-
-        in = cl;
     }
 }

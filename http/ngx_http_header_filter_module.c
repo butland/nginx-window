@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -61,8 +62,8 @@ static ngx_str_t ngx_http_status_lines[] = {
 
     /* ngx_null_string, */  /* "207 Multi-Status" */
 
-#define NGX_HTTP_LAST_LEVEL_200  207
-#define NGX_HTTP_LEVEL_200       (NGX_HTTP_LAST_LEVEL_200 - 200)
+#define NGX_HTTP_LAST_2XX  207
+#define NGX_HTTP_OFF_3XX   (NGX_HTTP_LAST_2XX - 200)
 
     /* ngx_null_string, */  /* "300 Multiple Choices" */
 
@@ -70,13 +71,12 @@ static ngx_str_t ngx_http_status_lines[] = {
     ngx_string("302 Moved Temporarily"),
     ngx_string("303 See Other"),
     ngx_string("304 Not Modified"),
+    ngx_null_string,  /* "305 Use Proxy" */
+    ngx_null_string,  /* "306 unused" */
+    ngx_string("307 Temporary Redirect"),
 
-    /* ngx_null_string, */  /* "305 Use Proxy" */
-    /* ngx_null_string, */  /* "306 unused" */
-    /* ngx_null_string, */  /* "307 Temporary Redirect" */
-
-#define NGX_HTTP_LAST_LEVEL_300  305
-#define NGX_HTTP_LEVEL_300       (NGX_HTTP_LAST_LEVEL_300 - 301)
+#define NGX_HTTP_LAST_3XX  308
+#define NGX_HTTP_OFF_4XX   (NGX_HTTP_LAST_3XX - 301 + NGX_HTTP_OFF_3XX)
 
     ngx_string("400 Bad Request"),
     ngx_string("401 Unauthorized"),
@@ -92,10 +92,7 @@ static ngx_str_t ngx_http_status_lines[] = {
     ngx_string("411 Length Required"),
     ngx_string("412 Precondition Failed"),
     ngx_string("413 Request Entity Too Large"),
-    ngx_null_string,  /* "414 Request-URI Too Large", but we never send it
-                       * because we treat such requests as the HTTP/0.9
-                       * requests and send only a body without a header
-                       */
+    ngx_string("414 Request-URI Too Large"),
     ngx_string("415 Unsupported Media Type"),
     ngx_string("416 Requested Range Not Satisfiable"),
 
@@ -108,11 +105,11 @@ static ngx_str_t ngx_http_status_lines[] = {
     /* ngx_null_string, */  /* "423 Locked" */
     /* ngx_null_string, */  /* "424 Failed Dependency" */
 
-#define NGX_HTTP_LAST_LEVEL_400  417
-#define NGX_HTTP_LEVEL_400       (NGX_HTTP_LAST_LEVEL_400 - 400)
+#define NGX_HTTP_LAST_4XX  417
+#define NGX_HTTP_OFF_5XX   (NGX_HTTP_LAST_4XX - 400 + NGX_HTTP_OFF_4XX)
 
     ngx_string("500 Internal Server Error"),
-    ngx_string("501 Method Not Implemented"),
+    ngx_string("501 Not Implemented"),
     ngx_string("502 Bad Gateway"),
     ngx_string("503 Service Temporarily Unavailable"),
     ngx_string("504 Gateway Time-out"),
@@ -124,7 +121,7 @@ static ngx_str_t ngx_http_status_lines[] = {
     /* ngx_null_string, */  /* "509 unused" */
     /* ngx_null_string, */  /* "510 Not Extended" */
 
-#define NGX_HTTP_LAST_LEVEL_500  508
+#define NGX_HTTP_LAST_5XX  508
 
 };
 
@@ -216,7 +213,7 @@ ngx_http_header_filter(ngx_http_request_t *r)
         status = r->headers_out.status;
 
         if (status >= NGX_HTTP_OK
-            && status < NGX_HTTP_LAST_LEVEL_200)
+            && status < NGX_HTTP_LAST_2XX)
         {
             /* 2XX */
 
@@ -234,7 +231,7 @@ ngx_http_header_filter(ngx_http_request_t *r)
             len += ngx_http_status_lines[status].len;
 
         } else if (status >= NGX_HTTP_MOVED_PERMANENTLY
-                   && status < NGX_HTTP_LAST_LEVEL_300)
+                   && status < NGX_HTTP_LAST_3XX)
         {
             /* 3XX */
 
@@ -242,35 +239,38 @@ ngx_http_header_filter(ngx_http_request_t *r)
                 r->header_only = 1;
             }
 
-            status = status - NGX_HTTP_MOVED_PERMANENTLY + NGX_HTTP_LEVEL_200;
+            status = status - NGX_HTTP_MOVED_PERMANENTLY + NGX_HTTP_OFF_3XX;
             status_line = &ngx_http_status_lines[status];
             len += ngx_http_status_lines[status].len;
 
         } else if (status >= NGX_HTTP_BAD_REQUEST
-                   && status < NGX_HTTP_LAST_LEVEL_400)
+                   && status < NGX_HTTP_LAST_4XX)
         {
             /* 4XX */
             status = status - NGX_HTTP_BAD_REQUEST
-                            + NGX_HTTP_LEVEL_200
-                            + NGX_HTTP_LEVEL_300;
+                            + NGX_HTTP_OFF_4XX;
 
             status_line = &ngx_http_status_lines[status];
             len += ngx_http_status_lines[status].len;
 
         } else if (status >= NGX_HTTP_INTERNAL_SERVER_ERROR
-                   && status < NGX_HTTP_LAST_LEVEL_500)
+                   && status < NGX_HTTP_LAST_5XX)
         {
             /* 5XX */
             status = status - NGX_HTTP_INTERNAL_SERVER_ERROR
-                            + NGX_HTTP_LEVEL_200
-                            + NGX_HTTP_LEVEL_300
-                            + NGX_HTTP_LEVEL_400;
+                            + NGX_HTTP_OFF_5XX;
 
             status_line = &ngx_http_status_lines[status];
             len += ngx_http_status_lines[status].len;
 
         } else {
-            len += NGX_INT_T_LEN;
+            len += NGX_INT_T_LEN + 1 /* SP */;
+            status_line = NULL;
+        }
+
+        if (status_line && status_line->len == 0) {
+            status = r->headers_out.status;
+            len += NGX_INT_T_LEN + 1 /* SP */;
             status_line = NULL;
         }
     }
@@ -382,7 +382,10 @@ ngx_http_header_filter(ngx_http_request_t *r)
         len += sizeof("Transfer-Encoding: chunked" CRLF) - 1;
     }
 
-    if (r->keepalive) {
+    if (r->headers_out.status == NGX_HTTP_SWITCHING_PROTOCOLS) {
+        len += sizeof("Connection: upgrade" CRLF) - 1;
+
+    } else if (r->keepalive) {
         len += sizeof("Connection: keep-alive" CRLF) - 1;
 
         /*
@@ -398,7 +401,7 @@ ngx_http_header_filter(ngx_http_request_t *r)
         }
 
     } else {
-        len += sizeof("Connection: closed" CRLF) - 1;
+        len += sizeof("Connection: close" CRLF) - 1;
     }
 
 #if (NGX_HTTP_GZIP)
@@ -448,7 +451,7 @@ ngx_http_header_filter(ngx_http_request_t *r)
         b->last = ngx_copy(b->last, status_line->data, status_line->len);
 
     } else {
-        b->last = ngx_sprintf(b->last, "%ui", status);
+        b->last = ngx_sprintf(b->last, "%03ui ", status);
     }
     *b->last++ = CR; *b->last++ = LF;
 
@@ -551,7 +554,11 @@ ngx_http_header_filter(ngx_http_request_t *r)
                              sizeof("Transfer-Encoding: chunked" CRLF) - 1);
     }
 
-    if (r->keepalive) {
+    if (r->headers_out.status == NGX_HTTP_SWITCHING_PROTOCOLS) {
+        b->last = ngx_cpymem(b->last, "Connection: upgrade" CRLF,
+                             sizeof("Connection: upgrade" CRLF) - 1);
+
+    } else if (r->keepalive) {
         b->last = ngx_cpymem(b->last, "Connection: keep-alive" CRLF,
                              sizeof("Connection: keep-alive" CRLF) - 1);
 

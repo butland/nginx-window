@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -27,6 +28,9 @@ static ssize_t sendfilev(int fd, const struct sendfilevec *vec,
 {
     return -1;
 }
+
+ngx_chain_t *ngx_solaris_sendfilev_chain(ngx_connection_t *c, ngx_chain_t *in,
+    off_t limit);
 
 #endif
 
@@ -73,7 +77,6 @@ ngx_solaris_sendfilev_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
 
 
     send = 0;
-    complete = 0;
 
     vec.elts = sfvs;
     vec.size = sizeof(sendfilevec_t);
@@ -86,6 +89,7 @@ ngx_solaris_sendfilev_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
         fprev = 0;
         sfv = NULL;
         eintr = 0;
+        complete = 0;
         sent = 0;
         prev_send = send;
 
@@ -93,8 +97,8 @@ ngx_solaris_sendfilev_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
 
         /* create the sendfilevec and coalesce the neighbouring bufs */
 
-        for (cl = in; cl && vec.nelts < IOV_MAX && send < limit; cl = cl->next)
-        {
+        for (cl = in; cl && send < limit; cl = cl->next) {
+
             if (ngx_buf_special(cl->buf)) {
                 continue;
             }
@@ -112,6 +116,10 @@ ngx_solaris_sendfilev_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
                     sfv->sfv_len += (size_t) size;
 
                 } else {
+                    if (vec.nelts >= IOV_MAX) {
+                        break;
+                    }
+
                     sfv = ngx_array_push(&vec);
                     if (sfv == NULL) {
                         return NGX_CHAIN_ERROR;
@@ -146,6 +154,10 @@ ngx_solaris_sendfilev_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
                     sfv->sfv_len += (size_t) size;
 
                 } else {
+                    if (vec.nelts >= IOV_MAX) {
+                        break;
+                    }
+
                     sfv = ngx_array_push(&vec);
                     if (sfv == NULL) {
                         return NGX_CHAIN_ERROR;
@@ -195,9 +207,9 @@ ngx_solaris_sendfilev_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
 
         c->sent += sent;
 
-        for (cl = in; cl; cl = cl->next) {
+        for ( /* void */ ; in; in = in->next) {
 
-            if (ngx_buf_special(cl->buf)) {
+            if (ngx_buf_special(in->buf)) {
                 continue;
             }
 
@@ -205,28 +217,28 @@ ngx_solaris_sendfilev_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
                 break;
             }
 
-            size = ngx_buf_size(cl->buf);
+            size = ngx_buf_size(in->buf);
 
             if ((off_t) sent >= size) {
                 sent = (size_t) ((off_t) sent - size);
 
-                if (ngx_buf_in_memory(cl->buf)) {
-                    cl->buf->pos = cl->buf->last;
+                if (ngx_buf_in_memory(in->buf)) {
+                    in->buf->pos = in->buf->last;
                 }
 
-                if (cl->buf->in_file) {
-                    cl->buf->file_pos = cl->buf->file_last;
+                if (in->buf->in_file) {
+                    in->buf->file_pos = in->buf->file_last;
                 }
 
                 continue;
             }
 
-            if (ngx_buf_in_memory(cl->buf)) {
-                cl->buf->pos += sent;
+            if (ngx_buf_in_memory(in->buf)) {
+                in->buf->pos += sent;
             }
 
-            if (cl->buf->in_file) {
-                cl->buf->file_pos += sent;
+            if (in->buf->in_file) {
+                in->buf->file_pos += sent;
             }
 
             break;
@@ -238,13 +250,11 @@ ngx_solaris_sendfilev_chain(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
 
         if (!complete) {
             wev->ready = 0;
-            return cl;
+            return in;
         }
 
-        if (send >= limit || cl == NULL) {
-            return cl;
+        if (send >= limit || in == NULL) {
+            return in;
         }
-
-        in = cl;
     }
 }

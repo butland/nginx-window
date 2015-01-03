@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -9,7 +10,7 @@
 
 
 #define NGX_HTTP_MAX_URI_CHANGES           10
-#define NGX_HTTP_MAX_SUBREQUESTS           50
+#define NGX_HTTP_MAX_SUBREQUESTS           200
 
 /* must be 2^n */
 #define NGX_HTTP_LC_HEADER_LEN             32
@@ -63,6 +64,10 @@
 #define NGX_HTTP_LOG_UNSAFE                8
 
 
+#define NGX_HTTP_CONTINUE                  100
+#define NGX_HTTP_SWITCHING_PROTOCOLS       101
+#define NGX_HTTP_PROCESSING                102
+
 #define NGX_HTTP_OK                        200
 #define NGX_HTTP_CREATED                   201
 #define NGX_HTTP_ACCEPTED                  202
@@ -74,6 +79,7 @@
 #define NGX_HTTP_MOVED_TEMPORARILY         302
 #define NGX_HTTP_SEE_OTHER                 303
 #define NGX_HTTP_NOT_MODIFIED              304
+#define NGX_HTTP_TEMPORARY_REDIRECT        307
 
 #define NGX_HTTP_BAD_REQUEST               400
 #define NGX_HTTP_UNAUTHORIZED              401
@@ -170,6 +176,8 @@ typedef struct {
     ngx_table_elt_t                  *connection;
     ngx_table_elt_t                  *if_modified_since;
     ngx_table_elt_t                  *if_unmodified_since;
+    ngx_table_elt_t                  *if_match;
+    ngx_table_elt_t                  *if_none_match;
     ngx_table_elt_t                  *user_agent;
     ngx_table_elt_t                  *referer;
     ngx_table_elt_t                  *content_length;
@@ -180,6 +188,7 @@ typedef struct {
 
     ngx_table_elt_t                  *transfer_encoding;
     ngx_table_elt_t                  *expect;
+    ngx_table_elt_t                  *upgrade;
 
 #if (NGX_HTTP_GZIP)
     ngx_table_elt_t                  *accept_encoding;
@@ -190,8 +199,8 @@ typedef struct {
 
     ngx_table_elt_t                  *keep_alive;
 
-#if (NGX_HTTP_PROXY || NGX_HTTP_REALIP || NGX_HTTP_GEO)
-    ngx_table_elt_t                  *x_forwarded_for;
+#if (NGX_HTTP_X_FORWARDED_FOR)
+    ngx_array_t                       x_forwarded_for;
 #endif
 
 #if (NGX_HTTP_REALIP)
@@ -220,8 +229,8 @@ typedef struct {
     time_t                            keep_alive_n;
 
     unsigned                          connection_type:2;
+    unsigned                          chunked:1;
     unsigned                          msie:1;
-    unsigned                          msie4:1;
     unsigned                          msie6:1;
     unsigned                          opera:1;
     unsigned                          gecko:1;
@@ -273,13 +282,25 @@ typedef struct {
     ngx_chain_t                      *bufs;
     ngx_buf_t                        *buf;
     off_t                             rest;
-    ngx_chain_t                      *to_write;
+    ngx_chain_t                      *free;
+    ngx_chain_t                      *busy;
+    ngx_http_chunked_t               *chunked;
     ngx_http_client_body_handler_pt   post_handler;
 } ngx_http_request_body_t;
 
 
+typedef struct ngx_http_addr_conf_s  ngx_http_addr_conf_t;
+
 typedef struct {
-    ngx_http_request_t               *request;
+    ngx_http_addr_conf_t             *addr_conf;
+    ngx_http_conf_ctx_t              *conf_ctx;
+
+#if (NGX_HTTP_SSL && defined SSL_CTRL_SET_TLSEXT_HOSTNAME)
+    ngx_str_t                        *ssl_servername;
+#if (NGX_PCRE)
+    ngx_http_regex_t                 *ssl_servername_regex;
+#endif
+#endif
 
     ngx_buf_t                       **busy;
     ngx_int_t                         nbusy;
@@ -287,19 +308,10 @@ typedef struct {
     ngx_buf_t                       **free;
     ngx_int_t                         nfree;
 
-    ngx_uint_t                        pipeline;    /* unsigned  pipeline:1; */
+#if (NGX_HTTP_SSL)
+    ngx_uint_t                        ssl;    /* unsigned  ssl:1; */
+#endif
 } ngx_http_connection_t;
-
-
-typedef struct ngx_http_server_name_s  ngx_http_server_name_t;
-
-
-typedef struct {
-     ngx_hash_combined_t              names;
-
-     ngx_uint_t                       nregex;
-     ngx_http_server_name_t          *regex;
-} ngx_http_virtual_names_t;
 
 
 typedef void (*ngx_http_cleanup_pt)(void *data);
@@ -395,8 +407,6 @@ struct ngx_http_request_s {
     ngx_http_post_subrequest_t       *post_subrequest;
     ngx_http_posted_request_t        *posted_requests;
 
-    ngx_http_virtual_names_t         *virtual_names;
-
     ngx_int_t                         phase_handler;
     ngx_http_handler_pt               content_handler;
     ngx_uint_t                        access_code;
@@ -410,6 +420,7 @@ struct ngx_http_request_s {
 #endif
 
     size_t                            limit_rate;
+    size_t                            limit_rate_after;
 
     /* used to learn the Apache compatible response length without a header */
     size_t                            header_size;
@@ -419,6 +430,9 @@ struct ngx_http_request_s {
     ngx_uint_t                        err_status;
 
     ngx_http_connection_t            *http_connection;
+#if (NGX_HTTP_SPDY)
+    ngx_http_spdy_stream_t           *spdy_stream;
+#endif
 
     ngx_http_log_handler_pt           log_handler;
 
@@ -478,10 +492,10 @@ struct ngx_http_request_s {
 
     /*
      * instead of using the request context data in
-     * ngx_http_limit_zone_module and ngx_http_limit_req_module
+     * ngx_http_limit_conn_module and ngx_http_limit_req_module
      * we use the single bits in the request structure
      */
-    unsigned                          limit_zone_set:1;
+    unsigned                          limit_conn_set:1;
     unsigned                          limit_req_set:1;
 
 #if 0
@@ -489,7 +503,6 @@ struct ngx_http_request_s {
 #endif
 
     unsigned                          pipeline:1;
-    unsigned                          plain_http:1;
     unsigned                          chunked:1;
     unsigned                          header_only:1;
     unsigned                          keepalive:1;
@@ -567,6 +580,15 @@ typedef struct {
 
 extern ngx_http_header_t       ngx_http_headers_in[];
 extern ngx_http_header_out_t   ngx_http_headers_out[];
+
+
+#define ngx_http_set_connection_log(c, l)                                     \
+                                                                              \
+    c->log->file = l->file;                                                   \
+    c->log->next = l->next;                                                   \
+    if (!(c->log->log_level & NGX_LOG_DEBUG_CONNECTION)) {                    \
+        c->log->log_level = l->log_level;                                     \
+    }
 
 
 #endif /* _NGX_HTTP_REQUEST_H_INCLUDED_ */

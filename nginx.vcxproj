@@ -39,7 +39,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
@@ -59,12 +59,11 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;HAVE_CONFIG_H;NO_SYS_TYPES_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <AdditionalDependencies>charset.lib;iconv.lib;advapi32.lib;ws2_32.lib;libeay32.lib;ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -102,6 +101,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="event\ngx_event_openssl_stapling.c" />
+    <ClCompile Include="http\modules\ngx_http_auth_request_module.c" />
+    <ClCompile Include="http\modules\ngx_http_gunzip_filter_module.c" />
+    <ClCompile Include="http\modules\ngx_http_limit_conn_module.c" />
+    <ClCompile Include="http\modules\ngx_http_mp4_module.c" />
+    <ClCompile Include="http\modules\ngx_http_upstream_keepalive_module.c" />
+    <ClCompile Include="http\modules\ngx_http_upstream_least_conn_module.c" />
+    <ClCompile Include="http\ngx_http_spdy.c" />
+    <ClCompile Include="http\ngx_http_spdy_filter_module.c" />
+    <ClCompile Include="http\ngx_http_spdy_module.c" />
     <ClCompile Include="lua-5.1.5\src\bit.c" />
     <ClCompile Include="lua-5.1.5\src\lapi.c" />
     <ClCompile Include="lua-5.1.5\src\lauxlib.c" />
@@ -282,7 +291,6 @@
     <ClCompile Include="http\modules\ngx_http_headers_filter_module.c" />
     <ClCompile Include="http\modules\ngx_http_index_module.c" />
     <ClCompile Include="http\modules\ngx_http_limit_req_module.c" />
-    <ClCompile Include="http\modules\ngx_http_limit_zone_module.c" />
     <ClCompile Include="http\modules\ngx_http_log_module.c" />
     <ClCompile Include="http\modules\ngx_http_map_module.c" />
     <ClCompile Include="http\modules\ngx_http_memcached_module.c" />
@@ -343,6 +351,10 @@
     <ClCompile Include="pcre-8.12\pcreposix.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="event\ngx_event_connect.h" />
+    <ClInclude Include="event\ngx_event_openssl.h" />
+    <ClInclude Include="http\ngx_http_spdy.h" />
+    <ClInclude Include="http\ngx_http_spdy_module.h" />
     <ClInclude Include="lua-5.1.5\src\lapi.h" />
     <ClInclude Include="lua-5.1.5\src\lauxlib.h" />
     <ClInclude Include="lua-5.1.5\src\lcode.h" />
@@ -503,7 +515,6 @@
     <ClInclude Include="pcre-8.12\ucp.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="lua-5.1.5\src\Makefile" />
     <None Include="os\win32\nginx.ico" />
   </ItemGroup>
   <ItemGroup>

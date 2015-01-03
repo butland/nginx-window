@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -169,7 +170,7 @@ ngx_iocp_timer(void *data)
 #endif
     }
 
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__) || defined(__GNUC__)
     return 0;
 #endif
 }

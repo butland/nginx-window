@@ -1,7 +1,7 @@
-#define NGX_CONFIGURE " --with-pcre --with-zlib --with-openssl --with-http_ssl_module"
+#define NGX_CONFIGURE " --with-cc=cl --builddir=objs --prefix= --conf-path=conf/nginx.conf --pid-path=logs/nginx.pid --http-log-path=logs/access.log --error-log-path=logs/error.log --sbin-path=nginx.exe --http-client-body-temp-path=temp/client_body_temp --http-proxy-temp-path=temp/proxy_temp --http-fastcgi-temp-path=temp/fastcgi_temp --with-cc-opt=-DFD_SETSIZE=4096 --with-pcre=objs/lib/pcre-8.32 --with-zlib=objs/lib/zlib-1.2.7 --with-openssl=objs/lib/openssl-1.0.1e --with-select_module --with-http_spdy_module --with-http_ssl_module --with-ipv6 --with-debug"
 
-#ifndef NGX_COMPILER
-#define NGX_COMPILER  "msvc 2005 "
+#ifndef NGX_HAVE_INET6
+#define NGX_HAVE_INET6  1
 #endif
 
 
@@ -25,6 +25,11 @@
 #endif
 
 
+#ifndef NGX_HAVE_SELECT
+#define NGX_HAVE_SELECT  1
+#endif
+
+
 #ifndef NGX_HTTP_CACHE
 #define NGX_HTTP_CACHE  1
 #endif
@@ -40,13 +45,18 @@
 #endif
 
 
+#ifndef NGX_HTTP_SPDY
+#define NGX_HTTP_SPDY  1
+#endif
+
+
 #ifndef NGX_CRYPT
 #define NGX_CRYPT  1
 #endif
 
 
-#ifndef NGX_HTTP_GEO
-#define NGX_HTTP_GEO  1
+#ifndef NGX_HTTP_X_FORWARDED_FOR
+#define NGX_HTTP_X_FORWARDED_FOR  1
 #endif
 
 
@@ -55,13 +65,18 @@
 #endif
 
 
-#ifndef NGX_HTTP_PROXY
-#define NGX_HTTP_PROXY  1
+#ifndef NGX_HTTP_X_FORWARDED_FOR
+#define NGX_HTTP_X_FORWARDED_FOR  1
 #endif
 
 
 #ifndef NGX_PCRE
 #define NGX_PCRE  1
+#endif
+
+
+#ifndef PCRE_STATIC
+#define PCRE_STATIC  1
 #endif
 
 
@@ -100,8 +115,8 @@
 #endif
 
 
-#ifndef NGX_PREFIX
-#define NGX_PREFIX  ""
+#ifndef NGX_ZLIB
+#define NGX_ZLIB  1
 #endif
 
 
@@ -111,7 +126,7 @@
 
 
 #ifndef NGX_SBIN_PATH
-#define NGX_SBIN_PATH  ""
+#define NGX_SBIN_PATH  "nginx.exe"
 #endif
 
 
@@ -141,17 +156,17 @@
 
 
 #ifndef NGX_HTTP_CLIENT_TEMP_PATH
-#define NGX_HTTP_CLIENT_TEMP_PATH  "client_body_temp"
+#define NGX_HTTP_CLIENT_TEMP_PATH  "temp/client_body_temp"
 #endif
 
 
 #ifndef NGX_HTTP_PROXY_TEMP_PATH
-#define NGX_HTTP_PROXY_TEMP_PATH  "proxy_temp"
+#define NGX_HTTP_PROXY_TEMP_PATH  "temp/proxy_temp"
 #endif
 
 
 #ifndef NGX_HTTP_FASTCGI_TEMP_PATH
-#define NGX_HTTP_FASTCGI_TEMP_PATH  "fastcgi_temp"
+#define NGX_HTTP_FASTCGI_TEMP_PATH  "temp/fastcgi_temp"
 #endif
 
 

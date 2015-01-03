@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -66,7 +67,7 @@ ngx_event_find_timer(void)
 
     ngx_mutex_unlock(ngx_event_timer_mutex);
 
-    timer = (ngx_msec_int_t) node->key - (ngx_msec_int_t) ngx_current_msec;
+    timer = (ngx_msec_int_t) (node->key - ngx_current_msec);
 
     return (ngx_msec_t) (timer > 0 ? timer : 0);
 }
@@ -94,8 +95,7 @@ ngx_event_expire_timers(void)
 
         /* node->key <= ngx_current_time */
 
-        if ((ngx_msec_int_t) node->key - (ngx_msec_int_t) ngx_current_msec <= 0)
-        {
+        if ((ngx_msec_int_t) (node->key - ngx_current_msec) <= 0) {
             ev = (ngx_event_t *) ((char *) node - offsetof(ngx_event_t, timer));
 
 #if (NGX_THREADS)
@@ -103,11 +103,11 @@ ngx_event_expire_timers(void)
             if (ngx_threaded && ngx_trylock(ev->lock) == 0) {
 
                 /*
-                 * We can not change the timer of the event that is been
-                 * handling by another thread.  And we can not easy walk
-                 * the rbtree to find a next expired timer so we exit the loop.
-                 * However it should be rare case when the event that is
-                 * been handling has expired timer.
+                 * We cannot change the timer of the event that is being
+                 * handled by another thread.  And we cannot easy walk
+                 * the rbtree to find next expired timer so we exit the loop.
+                 * However, it should be a rare case when the event that is
+                 * being handled has an expired timer.
                  */
 
                 ngx_log_debug1(NGX_LOG_DEBUG_EVENT, ev->log, 0,

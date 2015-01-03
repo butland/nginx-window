@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -50,13 +51,17 @@ typedef DWORD                      ngx_err_t;
 #define NGX_EHOSTUNREACH           WSAEHOSTUNREACH
 #define NGX_ENOMOREFILES           ERROR_NO_MORE_FILES
 #define NGX_EILSEQ                 ERROR_NO_UNICODE_TRANSLATION
+#define NGX_ELOOP                  0
+#define NGX_EBADF                  WSAEBADF
 
 #define NGX_EALREADY               WSAEALREADY
 #define NGX_EINVAL                 WSAEINVAL
+#define NGX_EMFILE                 WSAEMFILE
+#define NGX_ENFILE                 WSAEMFILE
 
 
 u_char *ngx_strerror(ngx_err_t err, u_char *errstr, size_t size);
-ngx_uint_t ngx_strerror_init(void);
+ngx_int_t ngx_strerror_init(void);
 
 
 #endif /* _NGX_ERRNO_H_INCLUDED_ */

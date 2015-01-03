@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -88,7 +89,7 @@ ngx_strlchr(u_char *p, u_char *last, u_char c)
 
 #if (NGX_MEMCPY_LIMIT)
 
-void *ngx_memcpy(void *dst, void *src, size_t n);
+void *ngx_memcpy(void *dst, const void *src, size_t n);
 #define ngx_cpymem(dst, src, n)   (((u_char *) ngx_memcpy(dst, src, n)) + (n))
 
 #else
@@ -166,6 +167,7 @@ ngx_int_t ngx_rstrncmp(u_char *s1, u_char *s2, size_t n);
 ngx_int_t ngx_rstrncasecmp(u_char *s1, u_char *s2, size_t n);
 ngx_int_t ngx_memn2cmp(u_char *s1, u_char *s2, size_t n1, size_t n2);
 ngx_int_t ngx_dns_strcmp(u_char *s1, u_char *s2);
+ngx_int_t ngx_filename_cmp(u_char *s1, u_char *s2, size_t n);
 
 ngx_int_t ngx_atoi(u_char *line, size_t n);
 ngx_int_t ngx_atofp(u_char *line, size_t n, size_t point);
@@ -189,12 +191,13 @@ size_t ngx_utf8_length(u_char *p, size_t n);
 u_char *ngx_utf8_cpystrn(u_char *dst, u_char *src, size_t n, size_t len);
 
 
-#define NGX_ESCAPE_URI         0
-#define NGX_ESCAPE_ARGS        1
-#define NGX_ESCAPE_HTML        2
-#define NGX_ESCAPE_REFRESH     3
-#define NGX_ESCAPE_MEMCACHED   4
-#define NGX_ESCAPE_MAIL_AUTH   5
+#define NGX_ESCAPE_URI            0
+#define NGX_ESCAPE_ARGS           1
+#define NGX_ESCAPE_URI_COMPONENT  2
+#define NGX_ESCAPE_HTML           3
+#define NGX_ESCAPE_REFRESH        4
+#define NGX_ESCAPE_MEMCACHED      5
+#define NGX_ESCAPE_MAIL_AUTH      6
 
 #define NGX_UNESCAPE_URI       1
 #define NGX_UNESCAPE_REDIRECT  2

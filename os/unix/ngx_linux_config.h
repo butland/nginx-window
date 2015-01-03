@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -21,6 +22,7 @@
 #include <stddef.h>             /* offsetof() */
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <errno.h>
 #include <string.h>
 #include <signal.h>
@@ -50,7 +52,6 @@
 #include <malloc.h>             /* memalign() */
 #include <limits.h>             /* IOV_MAX */
 #include <sys/ioctl.h>
-#include <sys/sysctl.h>
 #include <crypt.h>
 #include <sys/utsname.h>        /* uname() */
 
@@ -76,8 +77,14 @@ extern ssize_t sendfile(int s, int fd, int32_t *offset, size_t size);
 #endif
 
 
-#if (NGX_HAVE_POLL || NGX_HAVE_RTSIG)
+#if (NGX_HAVE_POLL)
 #include <poll.h>
+#endif
+
+
+#if (NGX_HAVE_RTSIG)
+#include <poll.h>
+#include <sys/sysctl.h>
 #endif
 
 
@@ -96,11 +103,6 @@ typedef struct iocb  ngx_aiocb_t;
 #define NGX_LISTEN_BACKLOG        511
 
 
-#if defined TCP_DEFER_ACCEPT && !defined NGX_HAVE_DEFERRED_ACCEPT
-#define NGX_HAVE_DEFERRED_ACCEPT  1
-#endif
-
-
 #ifndef NGX_HAVE_SO_SNDLOWAT
 /* setsockopt(SO_SNDLOWAT) returns ENOPROTOOPT */
 #define NGX_HAVE_SO_SNDLOWAT         0
@@ -113,6 +115,7 @@ typedef struct iocb  ngx_aiocb_t;
 
 
 #define NGX_HAVE_OS_SPECIFIC_INIT    1
+#define ngx_debug_init()
 
 
 extern char **environ;

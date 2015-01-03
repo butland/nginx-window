@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -8,9 +9,100 @@
 #include <ngx_core.h>
 
 
+static ngx_int_t ngx_test_full_name(ngx_str_t *name);
+
+
 static ngx_atomic_t   temp_number = 0;
 ngx_atomic_t         *ngx_temp_number = &temp_number;
 ngx_atomic_int_t      ngx_random_number = 123456;
+
+
+ngx_int_t
+ngx_get_full_name(ngx_pool_t *pool, ngx_str_t *prefix, ngx_str_t *name)
+{
+    size_t      len;
+    u_char     *p, *n;
+    ngx_int_t   rc;
+
+    rc = ngx_test_full_name(name);
+
+    if (rc == NGX_OK) {
+        return rc;
+    }
+
+    len = prefix->len;
+
+#if (NGX_WIN32)
+
+    if (rc == 2) {
+        len = rc;
+    }
+
+#endif
+
+    n = ngx_pnalloc(pool, len + name->len + 1);
+    if (n == NULL) {
+        return NGX_ERROR;
+    }
+
+    p = ngx_cpymem(n, prefix->data, len);
+    ngx_cpystrn(p, name->data, name->len + 1);
+
+    name->len += len;
+    name->data = n;
+
+    return NGX_OK;
+}
+
+
+static ngx_int_t
+ngx_test_full_name(ngx_str_t *name)
+{
+#if (NGX_WIN32)
+    u_char  c0, c1;
+
+    c0 = name->data[0];
+
+    if (name->len < 2) {
+        if (c0 == '/') {
+            return 2;
+        }
+
+        return NGX_DECLINED;
+    }
+
+    c1 = name->data[1];
+
+    if (c1 == ':') {
+        c0 |= 0x20;
+
+        if ((c0 >= 'a' && c0 <= 'z')) {
+            return NGX_OK;
+        }
+
+        return NGX_DECLINED;
+    }
+
+    if (c1 == '/') {
+        return NGX_OK;
+    }
+
+    if (c0 == '/') {
+        return 2;
+    }
+
+    return NGX_DECLINED;
+
+#else
+
+    if (name->data[0] == '/') {
+        return NGX_OK;
+    }
+
+    return NGX_DECLINED;
+
+#endif
+}
 
 
 ssize_t
@@ -267,9 +359,6 @@ ngx_conf_set_path_slot(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
         return NULL;
     }
 
-    path->len = 0;
-    path->manager = NULL;
-    path->loader = NULL;
     path->conf_file = cf->conf_file->file.name.data;
     path->line = cf->conf_file->line;
 
@@ -310,7 +399,7 @@ ngx_conf_merge_path_value(ngx_conf_t *cf, ngx_path_t **path, ngx_path_t *prev,
         return NGX_CONF_OK;
     }
 
-    *path = ngx_palloc(cf->pool, sizeof(ngx_path_t));
+    *path = ngx_pcalloc(cf->pool, sizeof(ngx_path_t));
     if (*path == NULL) {
         return NGX_CONF_ERROR;
     }
@@ -328,10 +417,6 @@ ngx_conf_merge_path_value(ngx_conf_t *cf, ngx_path_t **path, ngx_path_t *prev,
     (*path)->len = init->level[0] + (init->level[0] ? 1 : 0)
                    + init->level[1] + (init->level[1] ? 1 : 0)
                    + init->level[2] + (init->level[2] ? 1 : 0);
-
-    (*path)->manager = NULL;
-    (*path)->loader = NULL;
-    (*path)->conf_file = NULL;
 
     if (ngx_add_path(cf, path) != NGX_OK) {
         return NGX_CONF_ERROR;
@@ -411,11 +496,19 @@ ngx_add_path(ngx_conf_t *cf, ngx_path_t **slot)
 
     path = *slot;
 
-    p = cf->cycle->pathes.elts;
-    for (i = 0; i < cf->cycle->pathes.nelts; i++) {
+    p = cf->cycle->paths.elts;
+    for (i = 0; i < cf->cycle->paths.nelts; i++) {
         if (p[i]->name.len == path->name.len
             && ngx_strcmp(p[i]->name.data, path->name.data) == 0)
         {
+            if (p[i]->data != path->data) {
+                ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
+                                   "the same path name \"%V\" "
+                                   "used in %s:%ui and",
+                                   &p[i]->name, p[i]->conf_file, p[i]->line);
+                return NGX_ERROR;
+            }
+
             for (n = 0; n < 3; n++) {
                 if (p[i]->level[n] != path->level[n]) {
                     if (path->conf_file == NULL) {
@@ -456,7 +549,7 @@ ngx_add_path(ngx_conf_t *cf, ngx_path_t **slot)
         }
     }
 
-    p = ngx_array_push(&cf->cycle->pathes);
+    p = ngx_array_push(&cf->cycle->paths);
     if (p == NULL) {
         return NGX_ERROR;
     }
@@ -468,14 +561,14 @@ ngx_add_path(ngx_conf_t *cf, ngx_path_t **slot)
 
 
 ngx_int_t
-ngx_create_pathes(ngx_cycle_t *cycle, ngx_uid_t user)
+ngx_create_paths(ngx_cycle_t *cycle, ngx_uid_t user)
 {
     ngx_err_t         err;
     ngx_uint_t        i;
     ngx_path_t      **path;
 
-    path = cycle->pathes.elts;
-    for (i = 0; i < cycle->pathes.nelts; i++) {
+    path = cycle->paths.elts;
+    for (i = 0; i < cycle->paths.nelts; i++) {
 
         if (ngx_create_dir(path[i]->name.data, 0700) == NGX_FILE_ERROR) {
             err = ngx_errno;
@@ -731,14 +824,14 @@ ngx_copy_file(u_char *from, u_char *to, ngx_copy_file_t *cf)
 
         n = ngx_read_fd(fd, buf, len);
 
-        if (n == NGX_FILE_ERROR) {
+        if (n == -1) {
             ngx_log_error(NGX_LOG_ALERT, cf->log, ngx_errno,
                           ngx_read_fd_n " \"%s\" failed", from);
             goto failed;
         }
 
         if ((size_t) n != len) {
-            ngx_log_error(NGX_LOG_ALERT, cf->log, ngx_errno,
+            ngx_log_error(NGX_LOG_ALERT, cf->log, 0,
                           ngx_read_fd_n " has read only %z of %uz from %s",
                           n, size, from);
             goto failed;
@@ -746,14 +839,14 @@ ngx_copy_file(u_char *from, u_char *to, ngx_copy_file_t *cf)
 
         n = ngx_write_fd(nfd, buf, len);
 
-        if (n == NGX_FILE_ERROR) {
+        if (n == -1) {
             ngx_log_error(NGX_LOG_ALERT, cf->log, ngx_errno,
                           ngx_write_fd_n " \"%s\" failed", to);
             goto failed;
         }
 
         if ((size_t) n != len) {
-            ngx_log_error(NGX_LOG_ALERT, cf->log, ngx_errno,
+            ngx_log_error(NGX_LOG_ALERT, cf->log, 0,
                           ngx_write_fd_n " has written only %z of %uz to %s",
                           n, size, to);
             goto failed;
@@ -807,7 +900,7 @@ failed:
  *     reallocated if ctx->alloc is nonzero
  *
  * ctx->alloc - a size of data structure that is allocated at every level
- *     and is initilialized by ctx->init_handler()
+ *     and is initialized by ctx->init_handler()
  *
  * ctx->log - a log
  *

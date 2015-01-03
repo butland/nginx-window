@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -26,9 +27,9 @@ typedef struct {
     ngx_str_t      name;
     size_t         utf_len;
     size_t         escape;
+    size_t         escape_html;
 
     unsigned       dir:1;
-    unsigned       colon:1;
 
     time_t         mtime;
     off_t          size;
@@ -94,8 +95,8 @@ static ngx_http_module_t  ngx_http_autoindex_module_ctx = {
     NULL,                                  /* create server configuration */
     NULL,                                  /* merge server configuration */
 
-    ngx_http_autoindex_create_loc_conf,    /* create location configration */
-    ngx_http_autoindex_merge_loc_conf      /* merge location configration */
+    ngx_http_autoindex_create_loc_conf,    /* create location configuration */
+    ngx_http_autoindex_merge_loc_conf      /* merge location configuration */
 };
 
 
@@ -138,7 +139,7 @@ ngx_http_autoindex_handler(ngx_http_request_t *r)
 {
     u_char                         *last, *filename, scale;
     off_t                           length;
-    size_t                          len, utf_len, allocated, root;
+    size_t                          len, char_len, escape_html, allocated, root;
     ngx_tm_t                        tm;
     ngx_err_t                       err;
     ngx_buf_t                      *b;
@@ -303,7 +304,7 @@ ngx_http_autoindex_handler(ngx_http_request_t *r)
             if (ngx_de_info(filename, &dir) == NGX_FILE_ERROR) {
                 err = ngx_errno;
 
-                if (err != NGX_ENOENT) {
+                if (err != NGX_ENOENT && err != NGX_ELOOP) {
                     ngx_log_error(NGX_LOG_CRIT, r->connection->log, err,
                                   ngx_de_info_n " \"%s\" failed", filename);
 
@@ -338,15 +339,16 @@ ngx_http_autoindex_handler(ngx_http_request_t *r)
         ngx_cpystrn(entry->name.data, ngx_de_name(&dir), len + 1);
 
         entry->escape = 2 * ngx_escape_uri(NULL, ngx_de_name(&dir), len,
-                                           NGX_ESCAPE_HTML);
+                                           NGX_ESCAPE_URI_COMPONENT);
+
+        entry->escape_html = ngx_escape_html(NULL, entry->name.data,
+                                             entry->name.len);
 
         if (utf8) {
             entry->utf_len = ngx_utf8_length(entry->name.data, entry->name.len);
         } else {
             entry->utf_len = len;
         }
-
-        entry->colon = (ngx_strchr(entry->name.data, ':') != NULL);
 
         entry->dir = ngx_de_is_dir(&dir);
         entry->mtime = ngx_de_mtime(&dir);
@@ -355,13 +357,15 @@ ngx_http_autoindex_handler(ngx_http_request_t *r)
 
     if (ngx_close_dir(&dir) == NGX_ERROR) {
         ngx_log_error(NGX_LOG_ALERT, r->connection->log, ngx_errno,
-                      ngx_close_dir_n " \"%s\" failed", &path);
+                      ngx_close_dir_n " \"%V\" failed", &path);
     }
 
+    escape_html = ngx_escape_html(NULL, r->uri.data, r->uri.len);
+
     len = sizeof(title) - 1
-          + r->uri.len
+          + r->uri.len + escape_html
           + sizeof(header) - 1
-          + r->uri.len
+          + r->uri.len + escape_html
           + sizeof("</h1>") - 1
           + sizeof("<hr><pre><a href=\"../\">../</a>" CRLF) - 1
           + sizeof("</pre><hr>") - 1
@@ -373,7 +377,8 @@ ngx_http_autoindex_handler(ngx_http_request_t *r)
             + entry[i].name.len + entry[i].escape
             + 1                                          /* 1 is for "/" */
             + sizeof("\">") - 1
-            + entry[i].name.len - entry[i].utf_len + entry[i].colon * 2
+            + entry[i].name.len - entry[i].utf_len
+            + entry[i].escape_html
             + NGX_HTTP_AUTOINDEX_NAME_LEN + sizeof("&gt;") - 2
             + sizeof("</a>") - 1
             + sizeof(" 28-Sep-1970 12:00 ") - 1
@@ -383,7 +388,7 @@ ngx_http_autoindex_handler(ngx_http_request_t *r)
 
     b = ngx_create_temp_buf(r->pool, len);
     if (b == NULL) {
-        return NGX_HTTP_INTERNAL_SERVER_ERROR;
+        return NGX_ERROR;
     }
 
     if (entries.nelts > 1) {
@@ -393,9 +398,18 @@ ngx_http_autoindex_handler(ngx_http_request_t *r)
     }
 
     b->last = ngx_cpymem(b->last, title, sizeof(title) - 1);
-    b->last = ngx_cpymem(b->last, r->uri.data, r->uri.len);
-    b->last = ngx_cpymem(b->last, header, sizeof(header) - 1);
-    b->last = ngx_cpymem(b->last, r->uri.data, r->uri.len);
+
+    if (escape_html) {
+        b->last = (u_char *) ngx_escape_html(b->last, r->uri.data, r->uri.len);
+        b->last = ngx_cpymem(b->last, header, sizeof(header) - 1);
+        b->last = (u_char *) ngx_escape_html(b->last, r->uri.data, r->uri.len);
+
+    } else {
+        b->last = ngx_cpymem(b->last, r->uri.data, r->uri.len);
+        b->last = ngx_cpymem(b->last, header, sizeof(header) - 1);
+        b->last = ngx_cpymem(b->last, r->uri.data, r->uri.len);
+    }
+
     b->last = ngx_cpymem(b->last, "</h1>", sizeof("</h1>") - 1);
 
     b->last = ngx_cpymem(b->last, "<hr><pre><a href=\"../\">../</a>" CRLF,
@@ -406,14 +420,9 @@ ngx_http_autoindex_handler(ngx_http_request_t *r)
     for (i = 0; i < entries.nelts; i++) {
         b->last = ngx_cpymem(b->last, "<a href=\"", sizeof("<a href=\"") - 1);
 
-        if (entry[i].colon) {
-            *b->last++ = '.';
-            *b->last++ = '/';
-        }
-
         if (entry[i].escape) {
             ngx_escape_uri(b->last, entry[i].name.data, entry[i].name.len,
-                           NGX_ESCAPE_HTML);
+                           NGX_ESCAPE_URI_COMPONENT);
 
             b->last += entry[i].name.len + entry[i].escape;
 
@@ -433,20 +442,41 @@ ngx_http_autoindex_handler(ngx_http_request_t *r)
 
         if (entry[i].name.len != len) {
             if (len > NGX_HTTP_AUTOINDEX_NAME_LEN) {
-                utf_len = NGX_HTTP_AUTOINDEX_NAME_LEN - 3 + 1;
+                char_len = NGX_HTTP_AUTOINDEX_NAME_LEN - 3 + 1;
 
             } else {
-                utf_len = NGX_HTTP_AUTOINDEX_NAME_LEN + 1;
+                char_len = NGX_HTTP_AUTOINDEX_NAME_LEN + 1;
             }
 
+            last = b->last;
             b->last = ngx_utf8_cpystrn(b->last, entry[i].name.data,
-                                       utf_len, entry[i].name.len + 1);
+                                       char_len, entry[i].name.len + 1);
+
+            if (entry[i].escape_html) {
+                b->last = (u_char *) ngx_escape_html(last, entry[i].name.data,
+                                                     b->last - last);
+            }
+
             last = b->last;
 
         } else {
-            b->last = ngx_cpystrn(b->last, entry[i].name.data,
-                                  NGX_HTTP_AUTOINDEX_NAME_LEN + 1);
-            last = b->last - 3;
+            if (entry[i].escape_html) {
+                if (len > NGX_HTTP_AUTOINDEX_NAME_LEN) {
+                    char_len = NGX_HTTP_AUTOINDEX_NAME_LEN - 3;
+
+                } else {
+                    char_len = len;
+                }
+
+                b->last = (u_char *) ngx_escape_html(b->last,
+                                                  entry[i].name.data, char_len);
+                last = b->last;
+
+            } else {
+                b->last = ngx_cpystrn(b->last, entry[i].name.data,
+                                      NGX_HTTP_AUTOINDEX_NAME_LEN + 1);
+                last = b->last - 3;
+            }
         }
 
         if (len > NGX_HTTP_AUTOINDEX_NAME_LEN) {
@@ -459,8 +489,11 @@ ngx_http_autoindex_handler(ngx_http_request_t *r)
             }
 
             b->last = ngx_cpymem(b->last, "</a>", sizeof("</a>") - 1);
-            ngx_memset(b->last, ' ', NGX_HTTP_AUTOINDEX_NAME_LEN - len);
-            b->last += NGX_HTTP_AUTOINDEX_NAME_LEN - len;
+
+            if (NGX_HTTP_AUTOINDEX_NAME_LEN - len > 0) {
+                ngx_memset(b->last, ' ', NGX_HTTP_AUTOINDEX_NAME_LEN - len);
+                b->last += NGX_HTTP_AUTOINDEX_NAME_LEN - len;
+            }
         }
 
         *b->last++ = ' ';
@@ -616,7 +649,7 @@ ngx_http_autoindex_error(ngx_http_request_t *r, ngx_dir_t *dir, ngx_str_t *name)
                       ngx_close_dir_n " \"%V\" failed", name);
     }
 
-    return NGX_HTTP_INTERNAL_SERVER_ERROR;
+    return r->header_sent ? NGX_ERROR : NGX_HTTP_INTERNAL_SERVER_ERROR;
 }
 
 

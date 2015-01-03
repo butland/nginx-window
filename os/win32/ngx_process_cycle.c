@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -283,11 +284,10 @@ ngx_console_init(ngx_cycle_t *cycle)
     ccf = (ngx_core_conf_t *) ngx_get_conf(cycle->conf_ctx, ngx_core_module);
 
     if (ccf->daemon) {
-		//隐藏console执行台之用
-        /*if (FreeConsole() == 0) {
+        if (FreeConsole() == 0) {
             ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
                           "FreeConsole() failed");
-        }*/
+        }
 
         return;
     }
@@ -531,7 +531,7 @@ ngx_reap_worker(ngx_cycle_t *cycle, HANDLE h)
                 == NGX_INVALID_PID)
             {
                 ngx_log_error(NGX_LOG_ALERT, cycle->log, 0,
-                              "can not respawn %s", ngx_processes[n].name);
+                              "could not respawn %s", ngx_processes[n].name);
 
                 if (n == ngx_last_process - 1) {
                     ngx_last_process--;
@@ -815,7 +815,7 @@ ngx_worker_thread(void *data)
 
                 /* THREAD: lock */
 
-                if (c[i].fd != -1 && c[i].idle) {
+                if (c[i].fd != (ngx_socket_t) -1 && c[i].idle) {
                     c[i].close = 1;
                     c[i].read->handler(c[i].read);
                 }
@@ -874,7 +874,7 @@ ngx_worker_process_exit(ngx_cycle_t *cycle)
     if (ngx_exiting) {
         c = cycle->connections;
         for (i = 0; i < cycle->connection_n; i++) {
-            if (c[i].fd != -1
+            if (c[i].fd != (ngx_socket_t) -1
                 && c[i].read
                 && !c[i].read->accept
                 && !c[i].read->channel
@@ -963,8 +963,8 @@ ngx_cache_manager_process_handler(void)
 
     next = 60 * 60;
 
-    path = ngx_cycle->pathes.elts;
-    for (i = 0; i < ngx_cycle->pathes.nelts; i++) {
+    path = ngx_cycle->paths.elts;
+    for (i = 0; i < ngx_cycle->paths.nelts; i++) {
 
         if (path[i]->manager) {
             n = path[i]->manager(path[i]->data);
@@ -1002,8 +1002,8 @@ ngx_cache_loader_thread(void *data)
 
     cycle = (ngx_cycle_t *) ngx_cycle;
 
-    path = cycle->pathes.elts;
-    for (i = 0; i < cycle->pathes.nelts; i++) {
+    path = cycle->paths.elts;
+    for (i = 0; i < cycle->paths.nelts; i++) {
 
         if (ngx_terminate || ngx_quit) {
             break;

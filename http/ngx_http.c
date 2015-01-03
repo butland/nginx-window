@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -948,7 +949,8 @@ ngx_http_cmp_locations(const ngx_queue_t *one, const ngx_queue_t *two)
 
 #endif
 
-    rc = ngx_strcmp(first->name.data, second->name.data);
+    rc = ngx_filename_cmp(first->name.data, second->name.data,
+                          ngx_min(first->name.len, second->name.len) + 1);
 
     if (rc == 0 && !first->exact_match && second->exact_match) {
         /* an exact match must be before the same inclusive one */
@@ -974,8 +976,10 @@ ngx_http_join_exact_locations(ngx_conf_t *cf, ngx_queue_t *locations)
         lq = (ngx_http_location_queue_t *) q;
         lx = (ngx_http_location_queue_t *) x;
 
-        if (ngx_strcmp(lq->name->data, lx->name->data) == 0) {
-
+        if (lq->name->len == lx->name->len
+            && ngx_filename_cmp(lq->name->data, lx->name->data, lx->name->len)
+               == 0)
+        {
             if ((lq->exact && lx->exact) || (lq->inclusive && lx->inclusive)) {
                 ngx_log_error(NGX_LOG_EMERG, cf->log, 0,
                               "duplicate location \"%V\" in %s:%ui",
@@ -1027,7 +1031,7 @@ ngx_http_create_locations_list(ngx_queue_t *locations, ngx_queue_t *q)
         lx = (ngx_http_location_queue_t *) x;
 
         if (len > lx->name->len
-            || (ngx_strncmp(name, lx->name->data, len) != 0))
+            || ngx_filename_cmp(name, lx->name->data, len) != 0)
         {
             break;
         }
@@ -1224,9 +1228,12 @@ ngx_http_add_addresses(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
 #if (NGX_HTTP_SSL)
     ngx_uint_t             ssl;
 #endif
+#if (NGX_HTTP_SPDY)
+    ngx_uint_t             spdy;
+#endif
 
     /*
-     * we can not compare whole sockaddr struct's as kernel
+     * we cannot compare whole sockaddr struct's as kernel
      * may fill some fields in inherited sockaddr struct's
      */
 
@@ -1276,12 +1283,15 @@ ngx_http_add_addresses(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
 #if (NGX_HTTP_SSL)
         ssl = lsopt->ssl || addr[i].opt.ssl;
 #endif
+#if (NGX_HTTP_SPDY)
+        spdy = lsopt->spdy || addr[i].opt.spdy;
+#endif
 
         if (lsopt->set) {
 
             if (addr[i].opt.set) {
                 ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
-                        "a duplicate listen options for %s", addr[i].opt.addr);
+                        "duplicate listen options for %s", addr[i].opt.addr);
                 return NGX_ERROR;
             }
 
@@ -1305,6 +1315,9 @@ ngx_http_add_addresses(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
         addr[i].opt.default_server = default_server;
 #if (NGX_HTTP_SSL)
         addr[i].opt.ssl = ssl;
+#endif
+#if (NGX_HTTP_SPDY)
+        addr[i].opt.spdy = spdy;
 #endif
 
         return NGX_OK;
@@ -1335,6 +1348,14 @@ ngx_http_add_address(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
             return NGX_ERROR;
         }
     }
+
+#if (NGX_HTTP_SPDY && NGX_HTTP_SSL && !defined TLSEXT_TYPE_next_proto_neg)
+    if (lsopt->spdy && lsopt->ssl) {
+        ngx_conf_log_error(NGX_LOG_WARN, cf, 0,
+                           "nginx was built without OpenSSL NPN support, "
+                           "SPDY is not enabled for %s", lsopt->addr);
+    }
+#endif
 
     addr = ngx_array_push(&port->addrs);
     if (addr == NULL) {
@@ -1416,7 +1437,7 @@ ngx_http_optimize_servers(ngx_conf_t *cf, ngx_http_core_main_conf_t *cmcf,
 
         /*
          * check whether all name-based servers have the same
-         * configuraiton as a default server for given address:port
+         * configuration as a default server for given address:port
          */
 
         addr = port[p].addrs.elts;
@@ -1461,7 +1482,7 @@ ngx_http_server_names(ngx_conf_t *cf, ngx_http_core_main_conf_t *cmcf,
 
     ngx_memzero(&ha, sizeof(ngx_hash_keys_arrays_t));
 
-    ha.temp_pool = ngx_create_pool(16384, cf->log);
+    ha.temp_pool = ngx_create_pool(NGX_DEFAULT_POOL_SIZE, cf->log);
     if (ha.temp_pool == NULL) {
         return NGX_ERROR;
     }
@@ -1612,6 +1633,11 @@ ngx_http_cmp_conf_addrs(const void *one, const void *two)
         return 1;
     }
 
+    if (second->opt.wildcard) {
+        /* a wildcard address must be the last resort, shift it to the end */
+        return -1;
+    }
+
     if (first->opt.bind && !second->opt.bind) {
         /* shift explicit bind()ed addresses to the start */
         return -1;
@@ -1747,10 +1773,12 @@ ngx_http_add_listening(ngx_conf_t *cf, ngx_http_conf_addr_t *addr)
 
 #if (NGX_WIN32)
     {
-    ngx_iocp_conf_t  *iocpcf;
+    ngx_iocp_conf_t  *iocpcf = NULL;
 
-    iocpcf = ngx_event_get_conf(cf->cycle->conf_ctx, ngx_iocp_module);
-    if (iocpcf->acceptex_read) {
+    if (ngx_get_conf(cf->cycle->conf_ctx, ngx_events_module)) {
+        iocpcf = ngx_event_get_conf(cf->cycle->conf_ctx, ngx_iocp_module);
+    }
+    if (iocpcf && iocpcf->acceptex_read) {
         ls->post_accept_buffer_size = cscf->client_header_buffer_size;
     }
     }
@@ -1759,6 +1787,13 @@ ngx_http_add_listening(ngx_conf_t *cf, ngx_http_conf_addr_t *addr)
     ls->backlog = addr->opt.backlog;
     ls->rcvbuf = addr->opt.rcvbuf;
     ls->sndbuf = addr->opt.sndbuf;
+
+    ls->keepalive = addr->opt.so_keepalive;
+#if (NGX_HAVE_KEEPALIVE_TUNABLE)
+    ls->keepidle = addr->opt.tcp_keepidle;
+    ls->keepintvl = addr->opt.tcp_keepintvl;
+    ls->keepcnt = addr->opt.tcp_keepcnt;
+#endif
 
 #if (NGX_HAVE_DEFERRED_ACCEPT && defined SO_ACCEPTFILTER)
     ls->accept_filter = addr->opt.accept_filter;
@@ -1804,6 +1839,9 @@ ngx_http_add_addrs(ngx_conf_t *cf, ngx_http_port_t *hport,
         addrs[i].conf.default_server = addr[i].default_server;
 #if (NGX_HTTP_SSL)
         addrs[i].conf.ssl = addr[i].opt.ssl;
+#endif
+#if (NGX_HTTP_SPDY)
+        addrs[i].conf.spdy = addr[i].opt.spdy;
 #endif
 
         if (addr[i].hash.buckets == NULL
@@ -1865,6 +1903,9 @@ ngx_http_add_addrs6(ngx_conf_t *cf, ngx_http_port_t *hport,
         addrs6[i].conf.default_server = addr[i].default_server;
 #if (NGX_HTTP_SSL)
         addrs6[i].conf.ssl = addr[i].opt.ssl;
+#endif
+#if (NGX_HTTP_SPDY)
+        addrs6[i].conf.spdy = addr[i].opt.spdy;
 #endif
 
         if (addr[i].hash.buckets == NULL

@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -70,6 +71,10 @@ ngx_readv_chain(ngx_connection_t *c, ngx_chain_t *chain)
             iov->iov_len += chain->buf->end - chain->buf->last;
 
         } else {
+            if (vec.nelts >= IOV_MAX) {
+                break;
+            }
+
             iov = ngx_array_push(&vec);
             if (iov == NULL) {
                 return NGX_ERROR;
@@ -124,6 +129,7 @@ ngx_readv_chain(ngx_connection_t *c, ngx_chain_t *chain)
                                   "%d available bytes", rev->available);
 #endif
 
+                    rev->ready = 0;
                     rev->eof = 1;
                     rev->available = 0;
                 }
@@ -131,7 +137,7 @@ ngx_readv_chain(ngx_connection_t *c, ngx_chain_t *chain)
                 return n;
             }
 
-            if (n < size) {
+            if (n < size && !(ngx_event_flags & NGX_USE_GREEDY_EVENT)) {
                 rev->ready = 0;
             }
 
@@ -194,6 +200,10 @@ ngx_readv_chain(ngx_connection_t *c, ngx_chain_t *chain)
             iov->iov_len += chain->buf->end - chain->buf->last;
 
         } else {
+            if (vec.nelts >= IOV_MAX) {
+                break;
+            }
+
             iov = ngx_array_push(&vec);
             if (iov == NULL) {
                 return NGX_ERROR;

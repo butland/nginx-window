@@ -1,14 +1,17 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
 #ifndef _NGX_WIN32_CONFIG_H_INCLUDED_
 #define _NGX_WIN32_CONFIG_H_INCLUDED_
 
+
+#undef  WIN32
 #define WIN32         0x0400
-#define _WIN32_WINNT  0x0500
+#define _WIN32_WINNT  0x0501
 
 
 #define STRICT
@@ -16,9 +19,10 @@
 
 /* enable getenv() and gmtime() in msvc8 */
 #define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_DEPRECATE
 
 /*
- * we need to include <windows.h> explicity before <winsock2.h> because
+ * we need to include <windows.h> explicitly before <winsock2.h> because
  * the warning 4201 is enabled in <windows.h>
  */
 #include <windows.h>
@@ -27,15 +31,21 @@
 #pragma warning(disable:4201)
 #endif
 
-
 #include <winsock2.h>
 #include <ws2tcpip.h>  /* ipv6 */
 #include <mswsock.h>
 #include <shellapi.h>
 #include <stddef.h>    /* offsetof() */
+
+#ifdef __GNUC__
+/* GCC MinGW's stdio.h includes sys/types.h */
+#define _OFF_T_
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <ctype.h>
 #include <locale.h>
 
 #ifdef __WATCOMC__
@@ -67,6 +77,9 @@ typedef long  time_t;
 
 /* FD_SET() and FD_CLR(): conditional expression is constant */
 #pragma warning(disable:4127)
+
+/* array is too small to include a terminating null character */
+#pragma warning(disable:4295)
 
 #endif
 
@@ -111,7 +124,6 @@ typedef unsigned __int32    uint32_t;
 typedef __int32             int32_t;
 typedef unsigned __int16    uint16_t;
 #define ngx_libc_cdecl      __cdecl
-#define _strnicmp           strnicmp
 
 #else /* __WATCOMC__ */
 typedef unsigned int        uint32_t;
@@ -123,22 +135,47 @@ typedef unsigned short int  uint16_t;
 
 typedef __int64             int64_t;
 typedef unsigned __int64    uint64_t;
+
+#ifndef __WATCOMC__
 typedef int                 intptr_t;
 typedef u_int               uintptr_t;
+#endif
+
+
+/* Windows defines off_t as long, which is 32-bit */
+typedef __int64             off_t;
+#define _OFF_T_DEFINED
+
+#ifdef __WATCOMC__
+
+/* off_t is redefined by sys/types.h used by zlib.h */
+#define __TYPES_H_INCLUDED
+typedef int                 dev_t;
+typedef unsigned int        ino_t;
+
+#elif __BORLANDC__
+
+/* off_t is redefined by sys/types.h used by zlib.h */
+#define __TYPES_H
+
+typedef int                 dev_t;
+typedef unsigned int        ino_t;
+
+#endif
+
 
 typedef int                 ssize_t;
-typedef __int64             off_t;
 typedef uint32_t            in_addr_t;
 typedef u_short             in_port_t;
 typedef int                 sig_atomic_t;
 
 
 #define NGX_PTR_SIZE            4
-#define NGX_SIZE_T_LEN          sizeof("-2147483648") - 1
+#define NGX_SIZE_T_LEN          (sizeof("-2147483648") - 1)
 #define NGX_MAX_SIZE_T_VALUE    2147483647
-#define NGX_TIME_T_LEN          sizeof("-2147483648") - 1
+#define NGX_TIME_T_LEN          (sizeof("-2147483648") - 1)
 #define NGX_TIME_T_SIZE         4
-#define NGX_OFF_T_LEN           sizeof("-9223372036854775807") - 1
+#define NGX_OFF_T_LEN           (sizeof("-9223372036854775807") - 1)
 #define NGX_MAX_OFF_T_VALUE     9223372036854775807
 #define NGX_SIG_ATOMIC_T_SIZE   4
 
@@ -159,6 +196,10 @@ typedef int                 sig_atomic_t;
 #define NGX_HAVE_INHERITED_NONBLOCK  1
 #endif
 
+#ifndef NGX_HAVE_CASELESS_FILESYSTEM
+#define NGX_HAVE_CASELESS_FILESYSTEM  1
+#endif
+
 #ifndef NGX_HAVE_WIN32_TRANSMITPACKETS
 #define NGX_HAVE_WIN32_TRANSMITPACKETS  1
 #define NGX_HAVE_WIN32_TRANSMITFILE     0
@@ -177,8 +218,10 @@ typedef int                 sig_atomic_t;
 #define NGX_HAVE_SO_SNDLOWAT         0
 #endif
 
+#define NGX_HAVE_GETADDRINFO         1
 
 #define ngx_random               rand
+#define ngx_debug_init()
 
 
 #endif /* _NGX_WIN32_CONFIG_H_INCLUDED_ */

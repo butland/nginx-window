@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -195,6 +196,7 @@ failed:
 
     if (ngx_processes[s].handle) {
         ngx_close_handle(ngx_processes[s].handle);
+        ngx_processes[s].handle = NULL;
     }
 
     return NGX_INVALID_PID;

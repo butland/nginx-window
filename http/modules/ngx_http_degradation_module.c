@@ -1,12 +1,14 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
 #include <ngx_config.h>
 #include <ngx_core.h>
 #include <ngx_http.h>
+
 
 typedef struct {
     size_t      sbrk_size;
@@ -124,7 +126,7 @@ ngx_http_degraded(ngx_http_request_t *r)
              * ELF/i386 is loaded at 0x08000000, 128M
              * ELF/amd64 is loaded at 0x00400000, 4M
              *
-             * use a function address to substract the loading address
+             * use a function address to subtract the loading address
              */
 
             sbrk_size = (size_t) sbrk(0) - ((uintptr_t) ngx_palloc & ~0x3FFFFF);

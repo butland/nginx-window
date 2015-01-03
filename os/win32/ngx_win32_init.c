@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -140,7 +141,7 @@ ngx_os_init(ngx_log_t *log)
      */
 
     s = ngx_socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
-    if (s == -1) {
+    if (s == (ngx_socket_t) -1) {
         ngx_log_error(NGX_LOG_EMERG, log, ngx_socket_errno,
                       ngx_socket_n " falied");
         return NGX_ERROR;
@@ -226,6 +227,8 @@ ngx_os_init(ngx_log_t *log)
 
         ngx_sprintf((u_char *) ngx_unique, "%P%Z", ngx_pid);
     }
+
+    srand((unsigned) ngx_time());
 
     return NGX_OK;
 }

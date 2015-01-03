@@ -50,6 +50,7 @@ ngx_http_lua_ngx_echo(lua_State *L, unsigned newline)
     int                          type;
     const char                  *msg;
 
+	
     r = ngx_http_lua_get_req(L);
     if (r == NULL) {
         return luaL_error(L, "no request object found");

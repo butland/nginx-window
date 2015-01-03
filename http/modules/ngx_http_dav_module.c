@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -8,8 +9,6 @@
 #include <ngx_core.h>
 #include <ngx_http.h>
 
-
-#define NGX_HTTP_DAV_COPY_BLOCK      65536
 
 #define NGX_HTTP_DAV_OFF             2
 
@@ -158,7 +157,7 @@ ngx_http_dav_handler(ngx_http_request_t *r)
 
         if (r->uri.data[r->uri.len - 1] == '/') {
             ngx_log_error(NGX_LOG_ERR, r->connection->log, 0,
-                          "can not PUT to a collection");
+                          "cannot PUT to a collection");
             return NGX_HTTP_CONFLICT;
         }
 
@@ -207,6 +206,11 @@ ngx_http_dav_put_handler(ngx_http_request_t *r)
     ngx_file_info_t           fi;
     ngx_ext_rename_file_t     ext;
     ngx_http_dav_loc_conf_t  *dlcf;
+
+    if (r->request_body == NULL || r->request_body->temp_file == NULL) {
+        ngx_http_finalize_request(r, NGX_HTTP_INTERNAL_SERVER_ERROR);
+        return;
+    }
 
     ngx_http_map_uri_to_path(r, &path, &root, 0);
 

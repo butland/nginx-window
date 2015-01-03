@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -11,6 +12,7 @@
 #if (NGX_HPUX)
 #define _XOPEN_SOURCE
 #define _XOPEN_SOURCE_EXTENDED  1
+#define _HPUX_ALT_XOPEN_SOCKET_API
 #endif
 
 
@@ -37,6 +39,7 @@
 #include <stddef.h>             /* offsetof() */
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <errno.h>
 #include <string.h>
 #include <signal.h>
@@ -44,6 +47,7 @@
 #include <grp.h>
 #include <dirent.h>
 #include <glob.h>
+#include <time.h>
 #if (NGX_HAVE_SYS_PARAM_H)
 #include <sys/param.h>          /* statfs() */
 #endif
@@ -124,6 +128,8 @@ typedef struct aiocb  ngx_aiocb_t;
 
 
 #define NGX_LISTEN_BACKLOG  511
+
+#define ngx_debug_init()
 
 
 #if (__FreeBSD__) && (__FreeBSD_version < 400017)

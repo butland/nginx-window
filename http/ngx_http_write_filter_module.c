@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -184,18 +185,14 @@ ngx_http_write_filter(ngx_http_request_t *r, ngx_chain_t *in)
     }
 
     if (size == 0 && !(c->buffered & NGX_LOWLEVEL_BUFFERED)) {
-        if (last) {
+        if (last || flush) {
+            for (cl = r->out; cl; /* void */) {
+                ln = cl;
+                cl = cl->next;
+                ngx_free_chain(r->pool, ln);
+            }
+
             r->out = NULL;
-            c->buffered &= ~NGX_HTTP_WRITE_BUFFERED;
-
-            return NGX_OK;
-        }
-
-        if (flush) {
-            do {
-                r->out = r->out->next;
-            } while (r->out);
-
             c->buffered &= ~NGX_HTTP_WRITE_BUFFERED;
 
             return NGX_OK;
@@ -210,8 +207,12 @@ ngx_http_write_filter(ngx_http_request_t *r, ngx_chain_t *in)
     }
 
     if (r->limit_rate) {
-        limit = r->limit_rate * (ngx_time() - r->start_sec + 1)
-                - (c->sent - clcf->limit_rate_after);
+        if (r->limit_rate_after == 0) {
+            r->limit_rate_after = clcf->limit_rate_after;
+        }
+
+        limit = (off_t) r->limit_rate * (ngx_time() - r->start_sec + 1)
+                - (c->sent - r->limit_rate_after);
 
         if (limit <= 0) {
             c->write->delayed = 1;
@@ -223,11 +224,14 @@ ngx_http_write_filter(ngx_http_request_t *r, ngx_chain_t *in)
             return NGX_AGAIN;
         }
 
-    } else if (clcf->sendfile_max_chunk) {
-        limit = clcf->sendfile_max_chunk;
+        if (clcf->sendfile_max_chunk
+            && (off_t) clcf->sendfile_max_chunk < limit)
+        {
+            limit = clcf->sendfile_max_chunk;
+        }
 
     } else {
-        limit = 0;
+        limit = clcf->sendfile_max_chunk;
     }
 
     sent = c->sent;
@@ -249,30 +253,31 @@ ngx_http_write_filter(ngx_http_request_t *r, ngx_chain_t *in)
 
         nsent = c->sent;
 
-        if (clcf->limit_rate_after) {
+        if (r->limit_rate_after) {
 
-            sent -= clcf->limit_rate_after;
+            sent -= r->limit_rate_after;
             if (sent < 0) {
                 sent = 0;
             }
 
-            nsent -= clcf->limit_rate_after;
+            nsent -= r->limit_rate_after;
             if (nsent < 0) {
                 nsent = 0;
             }
         }
 
-        delay = (ngx_msec_t) ((nsent - sent) * 1000 / r->limit_rate + 1);
+        delay = (ngx_msec_t) ((nsent - sent) * 1000 / r->limit_rate);
 
         if (delay > 0) {
+            limit = 0;
             c->write->delayed = 1;
             ngx_add_timer(c->write, delay);
         }
+    }
 
-    } else if (c->write->ready
-               && clcf->sendfile_max_chunk
-               && (size_t) (c->sent - sent)
-                      >= clcf->sendfile_max_chunk - 2 * ngx_pagesize)
+    if (limit
+        && c->write->ready
+        && c->sent - sent >= limit - (off_t) (2 * ngx_pagesize))
     {
         c->write->delayed = 1;
         ngx_add_timer(c->write, 1);

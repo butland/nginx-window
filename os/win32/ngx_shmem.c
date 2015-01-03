@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -14,7 +15,7 @@ ngx_shm_alloc(ngx_shm_t *shm)
     u_char    *name;
     uint64_t   size;
 
-    name = ngx_alloc(shm->name.len + 4 + sizeof(NGX_INT32_LEN), shm->log);
+    name = ngx_alloc(shm->name.len + 2 + NGX_INT32_LEN, shm->log);
     if (name == NULL) {
         return NGX_ERROR;
     }

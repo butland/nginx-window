@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -24,7 +25,7 @@ static char *ngx_mail_ssl_session_cache(ngx_conf_t *cf, ngx_command_t *cmd,
     void *conf);
 
 
-static ngx_conf_enum_t  ngx_http_starttls_state[] = {
+static ngx_conf_enum_t  ngx_mail_starttls_state[] = {
     { ngx_string("off"), NGX_MAIL_STARTTLS_OFF },
     { ngx_string("on"), NGX_MAIL_STARTTLS_ON },
     { ngx_string("only"), NGX_MAIL_STARTTLS_ONLY },
@@ -37,6 +38,8 @@ static ngx_conf_bitmask_t  ngx_mail_ssl_protocols[] = {
     { ngx_string("SSLv2"), NGX_SSL_SSLv2 },
     { ngx_string("SSLv3"), NGX_SSL_SSLv3 },
     { ngx_string("TLSv1"), NGX_SSL_TLSv1 },
+    { ngx_string("TLSv1.1"), NGX_SSL_TLSv1_1 },
+    { ngx_string("TLSv1.2"), NGX_SSL_TLSv1_2 },
     { ngx_null_string, 0 }
 };
 
@@ -55,7 +58,7 @@ static ngx_command_t  ngx_mail_ssl_commands[] = {
       ngx_mail_ssl_starttls,
       NGX_MAIL_SRV_CONF_OFFSET,
       offsetof(ngx_mail_ssl_conf_t, starttls),
-      ngx_http_starttls_state },
+      ngx_mail_starttls_state },
 
     { ngx_string("ssl_certificate"),
       NGX_MAIL_MAIN_CONF|NGX_MAIL_SRV_CONF|NGX_CONF_TAKE1,
@@ -206,7 +209,8 @@ ngx_mail_ssl_merge_conf(ngx_conf_t *cf, void *parent, void *child)
                          prev->prefer_server_ciphers, 0);
 
     ngx_conf_merge_bitmask_value(conf->protocols, prev->protocols,
-                         (NGX_CONF_BITMASK_SET|NGX_SSL_SSLv3|NGX_SSL_TLSv1));
+                         (NGX_CONF_BITMASK_SET|NGX_SSL_SSLv3|NGX_SSL_TLSv1
+                          |NGX_SSL_TLSv1_1|NGX_SSL_TLSv1_2));
 
     ngx_conf_merge_str_value(conf->certificate, prev->certificate, "");
     ngx_conf_merge_str_value(conf->certificate_key, prev->certificate_key, "");
@@ -229,6 +233,11 @@ ngx_mail_ssl_merge_conf(ngx_conf_t *cf, void *parent, void *child)
 
     } else {
        mode = "";
+    }
+
+    if (conf->file == NULL) {
+        conf->file = prev->file;
+        conf->line = prev->line;
     }
 
     if (*mode) {
@@ -283,15 +292,14 @@ ngx_mail_ssl_merge_conf(ngx_conf_t *cf, void *parent, void *child)
         return NGX_CONF_ERROR;
     }
 
-    if (conf->ciphers.len) {
-        if (SSL_CTX_set_cipher_list(conf->ssl.ctx,
-                                   (const char *) conf->ciphers.data)
-            == 0)
-        {
-            ngx_ssl_error(NGX_LOG_EMERG, cf->log, 0,
-                          "SSL_CTX_set_cipher_list(\"%V\") failed",
-                          &conf->ciphers);
-        }
+    if (SSL_CTX_set_cipher_list(conf->ssl.ctx,
+                                (const char *) conf->ciphers.data)
+        == 0)
+    {
+        ngx_ssl_error(NGX_LOG_EMERG, cf->log, 0,
+                      "SSL_CTX_set_cipher_list(\"%V\") failed",
+                      &conf->ciphers);
+        return NGX_CONF_ERROR;
     }
 
     if (conf->prefer_server_ciphers) {
@@ -301,6 +309,10 @@ ngx_mail_ssl_merge_conf(ngx_conf_t *cf, void *parent, void *child)
     SSL_CTX_set_tmp_rsa_callback(conf->ssl.ctx, ngx_ssl_rsa512_key_callback);
 
     if (ngx_ssl_dhparam(cf, &conf->ssl, &conf->dhparam) != NGX_OK) {
+        return NGX_CONF_ERROR;
+    }
+
+    if (ngx_ssl_ecdh_curve(cf, &conf->ssl, &conf->ecdh_curve) != NGX_OK) {
         return NGX_CONF_ERROR;
     }
 
@@ -463,6 +475,8 @@ ngx_mail_ssl_session_cache(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
             if (scf->shm_zone == NULL) {
                 return NGX_CONF_ERROR;
             }
+
+            scf->shm_zone->init = ngx_ssl_session_cache_init;
 
             continue;
         }

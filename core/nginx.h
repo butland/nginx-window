@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -8,8 +9,8 @@
 #define _NGINX_H_INCLUDED_
 
 
-#define nginx_version      1001000
-#define NGINX_VERSION      "1.1.0"
+#define nginx_version      1005007
+#define NGINX_VERSION      "1.5.7"
 #define NGINX_VER          "nginx/" NGINX_VERSION
 
 #define NGINX_VAR          "NGINX"

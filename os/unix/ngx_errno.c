@@ -1,6 +1,7 @@
 
 /*
  * Copyright (C) Igor Sysoev
+ * Copyright (C) Nginx, Inc.
  */
 
 
@@ -12,7 +13,7 @@
  * The strerror() messages are copied because:
  *
  * 1) strerror() and strerror_r() functions are not Async-Signal-Safe,
- *    therefore, they can not be used in signal handlers;
+ *    therefore, they cannot be used in signal handlers;
  *
  * 2) a direct sys_errlist[] array may be used instead of these functions,
  *    but Linux linker warns about its usage:
@@ -41,7 +42,7 @@ ngx_strerror(ngx_err_t err, u_char *errstr, size_t size)
 }
 
 
-ngx_uint_t
+ngx_int_t
 ngx_strerror_init(void)
 {
     char       *msg;

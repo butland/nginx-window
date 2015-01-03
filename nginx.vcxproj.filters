@@ -40,14 +40,14 @@
     <Filter Include="pcre">
       <UniqueIdentifier>{f862b65b-9529-4cad-9fcd-3d57d5470595}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{b2ec1ab6-e212-4426-b393-ff4b078af388}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ngx_lua">
-      <UniqueIdentifier>{9e1db7aa-7d75-41b4-9785-744c1de33462}</UniqueIdentifier>
+      <UniqueIdentifier>{cba6cd39-85e5-4f08-96e0-141b74fc0d80}</UniqueIdentifier>
     </Filter>
     <Filter Include="ngx_lua\api">
-      <UniqueIdentifier>{cd0f17e4-2cf4-414c-8280-86abe9031349}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lua">
-      <UniqueIdentifier>{e14d553e-4505-418d-a87d-f105f6774293}</UniqueIdentifier>
+      <UniqueIdentifier>{8cec8d09-35e8-4df8-898e-6dce1ad84483}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -336,9 +336,6 @@
     <ClCompile Include="http\modules\ngx_http_limit_req_module.c">
       <Filter>http\modules</Filter>
     </ClCompile>
-    <ClCompile Include="http\modules\ngx_http_limit_zone_module.c">
-      <Filter>http\modules</Filter>
-    </ClCompile>
     <ClCompile Include="http\modules\ngx_http_log_module.c">
       <Filter>http\modules</Filter>
     </ClCompile>
@@ -513,6 +510,138 @@
     <ClCompile Include="pcre-8.12\pcreposix.c">
       <Filter>pcre</Filter>
     </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_auth_request_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_gunzip_filter_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_limit_conn_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_mp4_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_upstream_keepalive_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_upstream_least_conn_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_spdy.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_spdy_filter_module.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="http\ngx_http_spdy_module.c">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="event\ngx_event_openssl_stapling.c">
+      <Filter>event</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\bit.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lapi.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lauxlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lbaselib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lcode.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ldblib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ldebug.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ldo.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ldump.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lfunc.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lgc.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\linit.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\liolib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\llex.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lmathlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lmem.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\loadlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lobject.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lopcodes.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\loslib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lparser.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lstate.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lstring.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lstrlib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ltable.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ltablib.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\ltm.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lua.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\luac.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\luaiconv.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lundump.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lvm.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\lzio.c">
+      <Filter>lua</Filter>
+    </ClCompile>
+    <ClCompile Include="lua-5.1.5\src\print.c">
+      <Filter>lua</Filter>
+    </ClCompile>
     <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_accessby.c">
       <Filter>ngx_lua</Filter>
     </ClCompile>
@@ -656,108 +785,6 @@
     </ClCompile>
     <ClCompile Include="lua-nginx-module-0.9.13\src\ngx_http_lua_worker.c">
       <Filter>ngx_lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lapi.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lauxlib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lbaselib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lcode.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\ldblib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\ldebug.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\ldo.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\ldump.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lfunc.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lgc.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\linit.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\liolib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\llex.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lmathlib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lmem.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\loadlib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lobject.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lopcodes.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\loslib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lparser.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lstate.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lstring.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lstrlib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\ltable.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\ltablib.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\ltm.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lua.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\luac.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lundump.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lvm.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\lzio.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\print.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\bit.c">
-      <Filter>lua</Filter>
-    </ClCompile>
-    <ClCompile Include="lua-5.1.5\src\luaiconv.c">
-      <Filter>lua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1016,6 +1043,87 @@
     <ClInclude Include="pcre-8.12\ucp.h">
       <Filter>pcre</Filter>
     </ClInclude>
+    <ClInclude Include="http\ngx_http_spdy.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="http\ngx_http_spdy_module.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="event\ngx_event_connect.h">
+      <Filter>event</Filter>
+    </ClInclude>
+    <ClInclude Include="event\ngx_event_openssl.h">
+      <Filter>event</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lapi.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lauxlib.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lcode.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\ldebug.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\ldo.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lfunc.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lgc.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\llex.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\llimits.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lmem.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lobject.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lopcodes.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lparser.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lstate.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lstring.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\ltable.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\ltm.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lua.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\luaconf.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lualib.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lundump.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lvm.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua-5.1.5\src\lzio.h">
+      <Filter>lua</Filter>
+    </ClInclude>
     <ClInclude Include="lua-nginx-module-0.9.13\src\ddebug.h">
       <Filter>ngx_lua</Filter>
     </ClInclude>
@@ -1166,82 +1274,10 @@
     <ClInclude Include="lua-nginx-module-0.9.13\src\api\ngx_http_lua_api.h">
       <Filter>ngx_lua\api</Filter>
     </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lapi.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lauxlib.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lcode.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\ldebug.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\ldo.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lfunc.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lgc.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\llex.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\llimits.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lmem.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lobject.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lopcodes.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lparser.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lstate.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lstring.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\ltable.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\ltm.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lua.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\luaconf.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lualib.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lundump.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lvm.h">
-      <Filter>lua</Filter>
-    </ClInclude>
-    <ClInclude Include="lua-5.1.5\src\lzio.h">
-      <Filter>lua</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="os\win32\nginx.ico">
       <Filter>os\win32</Filter>
-    </None>
-    <None Include="lua-5.1.5\src\Makefile">
-      <Filter>lua</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
