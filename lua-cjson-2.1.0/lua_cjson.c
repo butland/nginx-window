@@ -46,6 +46,13 @@
 #include "strbuf.h"
 #include "fpconv.h"
 
+#include <float.h>  
+#define isnan(x) ((x) != (x))  
+#define isinf(x) (!_finite(x) && !_isnan(x))  
+#define strncasecmp  _strnicmp  
+#define snprintf  _strnicmp  
+#define ENABLE_CJSON_GLOBAL 1
+
 #ifndef CJSON_MODNAME
 #define CJSON_MODNAME   "cjson"
 #endif
@@ -58,6 +65,8 @@
 #if !defined(isinf) && (defined(USE_INTERNAL_ISINF) || defined(MISSING_ISINF))
 #define isinf(x) (!isnan(x) && isnan((x) - (x)))
 #endif
+
+ 
 
 #define DEFAULT_SPARSE_CONVERT 0
 #define DEFAULT_SPARSE_RATIO 2
@@ -1111,7 +1120,7 @@ static void json_throw_parse_error(lua_State *l, json_parse_t *json,
                exp, found, token->index + 1);
 }
 
-static inline void json_decode_ascend(json_parse_t *json)
+static void json_decode_ascend(json_parse_t *json)
 {
     json->current_depth--;
 }
