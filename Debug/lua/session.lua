@@ -14,7 +14,7 @@ local ffi_cdef    = ffi.cdef
 local ffi_new     = ffi.new
 local ffi_str     = ffi.string
 local ffi_typeof  = ffi.typeof
-local C           = ffi.C
+local C           = ffi.load("libeay32",true)
 
 local ENCODE_CHARS = {
     ["+"] = "-",

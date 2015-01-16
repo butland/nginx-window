@@ -7,12 +7,15 @@ local ffi_new = ffi.new
 local ffi_gc = ffi.gc
 local ffi_str = ffi.string
 local ffi_copy = ffi.copy
-local C = ffi.C
+
 local setmetatable = setmetatable
 local error = error
 local type = type
 
+local C=ffi.load("libeay32",true)
+--local C=ffi.load("ssleay32",true)
 
+--local C = ffi.C
 local _M = { _VERSION = '0.09' }
 
 local mt = { __index = _M }
