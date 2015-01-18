@@ -22,12 +22,11 @@ Debug/rc.write.1.tlog
 debug/desktop.ini
 lua-nginx-module-0.9.13/.gitignore
 ngx_devel_kit-0.2.19/.gitignore
-Debug/web/
 README.md
 Release/nginx.log
 logs/
-conf/
-Debug/conf/
-Debug/conf/*
-Debug/*
 .gitignore
+.gitignore
+Debug/moochine_demo.log*
+Debug/web/static/*
+nginx.v11.suo

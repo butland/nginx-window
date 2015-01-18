@@ -1,177 +1,154 @@
-{% layout="layout.html" %}
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>TCManage Data</title>
 
-    <div class="panel panel-default">
-        <a href="#page-stats" class="panel-heading" data-toggle="collapse">Latest Stats</a>
-        <div id="page-stats" class="panel-collapse panel-body collapse in">
+  <!-- Set render engine for 360 browser -->
+  <meta name="renderer" content="webkit">
 
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6">
-                            <div class="knob-container">
-                                <input class="knob" data-width="200" data-min="0" data-max="3000" data-displayPrevious="true" value="2500" data-fgColor="#92A3C2" data-readOnly=true;>
-                                <h3 class="text-muted text-center">Accounts</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="knob-container">
-                                <input class="knob" data-width="200" data-min="0" data-max="4500" data-displayPrevious="true" value="3299" data-fgColor="#92A3C2" data-readOnly=true;>
-                                <h3 class="text-muted text-center">Subscribers</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="knob-container">
-                                <input class="knob" data-width="200" data-min="0" data-max="2700" data-displayPrevious="true" value="1840" data-fgColor="#92A3C2" data-readOnly=true;>
-                                <h3 class="text-muted text-center">Pending</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="knob-container">
-                                <input class="knob" data-width="200" data-min="0" data-max="15000" data-displayPrevious="true" value="10067" data-fgColor="#92A3C2" data-readOnly=true;>
-                                <h3 class="text-muted text-center">Completed</h3>
-                            </div>
-                        </div>
-                    </div>
-        </div>
-    </div>
+  <!-- No Baidu Siteapp-->
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <meta name="msapplication-TileColor" content="#0e90d2">
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+<div class="am-g am-g-fixed am-margin-top">
+  <div class="am-u-sm-12">
+    <h1>你好世界！小可 Amaze UI 模板。</h1>
 
-<div class="row">
-    <div class="col-sm-6 col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading no-collapse">Not Collapsible<span class="label label-warning">+10</span></div>
-            <table class="table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Username</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Mark</td>
-                  <td>Tompson</td>
-                  <td>the_mark7</td>
-                </tr>
-                <tr>
-                  <td>Ashley</td>
-                  <td>Jacobs</td>
-                  <td>ash11927</td>
-                </tr>
-                <tr>
-                  <td>Audrey</td>
-                  <td>Ann</td>
-                  <td>audann84</td>
-                </tr>
-                <tr>
-                  <td>John</td>
-                  <td>Robinson</td>
-                  <td>jr5527</td>
-                </tr>
-                <tr>
-                  <td>Aaron</td>
-                  <td>Butler</td>
-                  <td>aaron_butler</td>
-                </tr>
-                <tr>
-                  <td>Chris</td>
-                  <td>Albert</td>
-                  <td>cab79</td>
-                </tr>
-              </tbody>
-            </table>
-        </div>
+    <p>这是一个基础的页面，引入 Amaze UI 的 css 、js
+      文件。如果你已经熟读文档，使用时删除内容开始开发即可。建议使用前先阅读文档，以提高开发效率。</p>
+  </div>
+</div>
+<div class="am-g am-g-fixed am-margin-top">
+  <p class="am-u-sm-12">下载包里面有 4 个常见布局示例，供开发者参考。</p>
+
+  <div class="am-u-sm-12">
+    <div class="am-g">
+      <div class="am-u-sm-12 am-u-md-3">
+        <a href="landing.html"><img class="am-img-thumbnail"
+                                    src="assets/i/examples/landingPage.png"
+                                    alt="展示页面"/></a>
+      </div>
+      <div class="am-u-sm-12 am-u-md-9">
+        <h3>展示页面</h3>
+
+        <p>
+          CSS 部分：<a class="am-badge am-badge-success" href="/css/grid">网格</a> <a
+          class="am-badge am-badge-success" href="/css/icon">图标</a> <a
+          class="am-badge am-badge-success" href="/css/button">按钮</a> <a
+          class="am-badge am-badge-success" href="/css/form">表单</a> <a
+          class="am-badge am-badge-success" href="/css/article">文章页</a> <a
+          class="am-badge am-badge-success" href="/css/topbar">导航条</a> <a
+          class="am-badge am-badge-success" href="/css/utility">辅助类</a><br/>
+          JS 插件部分：<a class="am-badge am-badge-primary"
+                     href="/javascript/dropdown">下拉组件</a> <a
+          class="am-badge am-badge-primary"
+          href="/javascript/scrollspy">滚动侦测</a>
+        </p>
+      </div>
     </div>
-    <div class="col-sm-6 col-md-6">
-        <div class="panel panel-default">
-            <a href="#widget1container" class="panel-heading" data-toggle="collapse">Collapsible </a>
-            <div id="widget1container" class="panel-body collapse in">
-                <h2>Here's a Tip</h2>
-                <p>This template was developed with <a href="http://middlemanapp.com/" target="_blank">Middleman</a> and includes .erb layouts and views.</p>
-                <p>All of the views you see here (sign in, sign up, users, etc) are already split up so you don't have to waste your time doing it yourself!</p>
-                <p>The layout.erb file includes the header, footer, and side navigation and all of the views are broken out into their own files.</p>
-                <p>If you aren't using Ruby, there is also a set of plain HTML files for each page, just like you would expect.</p>
-            </div>
-        </div>
+    <div class="am-g am-margin-top">
+      <div class="am-u-sm-12 am-u-md-3">
+        <a href="login.html"><img class="am-img-thumbnail"
+                                  src="assets/i/examples/loginPage.png"
+                                  alt="登录页面"/></a>
+      </div>
+      <div class="am-u-sm-12 am-u-md-9">
+        <h3>登录页面</h3>
+
+        <p>
+          CSS 部分：<a class="am-badge am-badge-success" href="/css/grid">网格</a> <a
+          class="am-badge am-badge-success" href="/css/icon">图标</a> <a
+          class="am-badge am-badge-success" href="/css/button">按钮</a> <a
+          class="am-badge am-badge-success" href="/css/button-group">按钮组</a> <a
+          class="am-badge am-badge-success" href="/css/form">表单</a>
+        </p>
+      </div>
     </div>
+    <div class="am-g am-margin-top">
+      <div class="am-u-sm-12 am-u-md-3">
+        <a href="blog.html"><img class="am-img-thumbnail"
+                                 src="assets/i/examples/blogPage.png"
+                                 alt="博客页面"/></a>
+      </div>
+      <div class="am-u-sm-12 am-u-md-9">
+        <h3>博客页面</h3>
+
+        <p>
+          CSS 部分：<a class="am-badge am-badge-success" href="/css/grid">网格</a> <a
+          class="am-badge am-badge-success" href="/css/block-grid">等宽布局</a> <a
+          class="am-badge am-badge-success" href="/css/icon">图标</a> <a
+          class="am-badge am-badge-success" href="/css/button">按钮</a> <a
+          class="am-badge am-badge-success" href="/css/panel">面板</a> <a
+          class="am-badge am-badge-success" href="/css/list">列表</a> <a
+          class="am-badge am-badge-success" href="/css/pagination">分页</a><br/>
+          JS 插件部分：<a class="am-badge am-badge-primary"
+                     href="/css/dropdown">下拉组件</a>
+        </p>
+      </div>
+    </div>
+    <div class="am-g am-margin-top">
+      <div class="am-u-sm-12 am-u-md-3">
+        <a href="sidebar.html"><img class="am-img-thumbnail"
+                                    src="assets/i/examples/sidebarPage.png"
+                                    alt="博客侧栏页面"/></a>
+      </div>
+      <div class="am-u-sm-12 am-u-md-9">
+        <h3>博客侧栏页面</h3>
+
+        <p>
+          CSS 部分：<a class="am-badge am-badge-success" href="/css/grid">网格</a> <a
+          class="am-badge am-badge-success" href="/css/article">文章页</a> <a
+          class="am-badge am-badge-success" href="/css/comment">评论列表</a> <a
+          class="am-badge am-badge-success" href="/css/button">按钮</a> <a
+          class="am-badge am-badge-success" href="/css/icon">图标</a> <a
+          class="am-badge am-badge-success" href="/css/list">列表</a> <a
+          class="am-badge am-badge-success" href="/css/utility">辅助类</a><br/>
+          JS 插件部分：<a class="am-badge am-badge-primary"
+                     href="/javascript/offcanvas">侧边栏组件</a>
+        </p>
+      </div>
+    </div>
+    <hr/>
+    <h2>Web 组件示例</h2>
+    <ul>
+      <li><a href="widget.basic.html">widget.basic.html</a> 使用了 <a
+        href="http://amazeui.org/widgets">Web 组件</a> 的 HTML 结构和样式，但没用使用模板在前端渲染数据，供通过后端渲染数据的用户参考。</li>
+      <li><a href="widget.html">widget.html</a> 是 Web 组件的展示，更多细节查看：<a
+        href="http://amazeui.org/widgets">Web 组件</a></li>
+    </ul>
+    <h3>开始创建你的网页吧。</h3>
+  </div>
 </div>
 
-<div class="row">
-    <div class="col-sm-6 col-md-6">
-        <div class="panel panel-default"> 
-            <div class="panel-heading no-collapse">
-                <span class="panel-icon pull-right">
-                    <a href="#" class="demo-cancel-click" rel="tooltip" title="Click to refresh"><i class="fa fa-refresh"></i></a>
-                </span>
+<footer class="am-margin-top">
+  <hr/>
+  <p class="am-text-center">
+    <small>by The AmazeUI Team.</small>
+  </p>
+</footer>
+<!-- 以上页面内容 开发时删除 -->
 
-                Needed to Close
-            </div>
-            <table class="table list">
-              <tbody>
-                  <tr>
-                      <td>
-                          <a href="#"><p class="title">Care Hospital</p></a>
-                          <p class="info">Sales Rating: 86%</p>
-                      </td>
-                      <td>
-                          <p>Date: 7/19/2012</p>
-                          <a href="#">View Transaction</a>
-                      </td>
-                      <td>
-                          <p class="text-danger h3 pull-right" style="margin-top: 12px;">$20,500</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>
-                          <a href="#"><p class="title">Custom Eyesight</p></a>
-                          <p class="info">Sales Rating: 58%</p>
-                      </td>
-                      <td>
-                          <p>Date: 7/19/2012</p>
-                          <a href="#">View Transaction</a>
-                      </td>
-                      <td>
-                          <p class="text-danger h3 pull-right" style="margin-top: 12px;">$12,600</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>
-                          <a href="#"><p class="title">Clear Dental</p></a>
-                          <p class="info">Sales Rating: 76%</p>
-                      </td>
-                      <td>
-                          <p>Date: 7/19/2012</p>
-                          <a href="#">View Transaction</a>
-                      </td>
-                      <td>
-                          <p class="text-danger h3 pull-right" style="margin-top: 12px;">$2,500</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>
-                          <a href="#"><p class="title">Safe Insurance</p></a>
-                          <p class="info">Sales Rating: 82%</p>
-                      </td>
-                      <td>
-                          <p>Date: 7/19/2012</p>
-                          <a href="#">View Transaction</a>
-                      </td>
-                      <td>
-                          <p class="text-danger h3 pull-right" style="margin-top: 12px;">$22,400</p>
-                      </td>
-                  </tr>
-                    
-              </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-6">
-        <div class="panel panel-default">
-            <a href="#widget2container" class="panel-heading" data-toggle="collapse">Collapsible </a>
-            <div id="widget2container" class="panel-body collapse in">
-                <h2>Built with Less</h2>
-                <p>The CSS is built with Less. There is a compiled version included if you prefer plain CSS.</p>
-                <p>Fava bean jícama seakale beetroot courgette shallot amaranth pea garbanzo carrot radicchio peanut leek pea sprouts arugula brussels sprout green bean. Spring onion broccoli chicory shallot winter purslane pumpkin gumbo cabbage squash beet greens lettuce celery. Gram zucchini swiss chard mustard burdock radish brussels sprout groundnut. Asparagus horseradish beet greens broccoli brussels.</p>
-                <p><a class="btn btn-primary">Learn more »</a></p>
-            </div>
-        </div>
-    </div>
-</div>
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/polyfill/rem.min.js"></script>
+<script src="assets/js/polyfill/respond.min.js"></script>
+<script src="assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/amazeui.min.js"></script>
+<!--<![endif]-->
+
+</body>
+</html>
