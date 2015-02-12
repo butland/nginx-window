@@ -162,9 +162,6 @@
     <ClCompile Include="event\ngx_event_connect.c">
       <Filter>event</Filter>
     </ClCompile>
-    <ClCompile Include="event\ngx_event_mutex.c">
-      <Filter>event</Filter>
-    </ClCompile>
     <ClCompile Include="event\ngx_event_pipe.c">
       <Filter>event</Filter>
     </ClCompile>
@@ -897,6 +894,15 @@
     <ClCompile Include="lua-cjson-2.1.0\lua_cjson.c">
       <Filter>luajit</Filter>
     </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_hello_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_syslog.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="http\modules\ngx_http_upstream_hash_module.c">
+      <Filter>http\modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ngx_auto_config.h">
@@ -1546,6 +1552,9 @@
     </ClInclude>
     <ClInclude Include="lua-cjson-2.1.0\strbuf.h">
       <Filter>cjson</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_syslog.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

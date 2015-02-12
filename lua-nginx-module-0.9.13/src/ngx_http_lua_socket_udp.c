@@ -1404,10 +1404,10 @@ ngx_http_lua_udp_connect(ngx_udp_connection_t *uc)
 
     /* TODO: lock event when call completion handler */
 
-    rev->lock = &c->lock;
-    wev->lock = &c->lock;
-    rev->own_lock = &c->lock;
-    wev->own_lock = &c->lock;
+    //rev->lock = &c->lock;
+    //wev->lock = &c->lock;
+    //rev->own_lock = &c->lock;
+    //wev->own_lock = &c->lock;
 
 #endif
 

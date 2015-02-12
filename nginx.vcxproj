@@ -102,11 +102,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="core\ngx_proxy_protocol.c" />
+    <ClCompile Include="core\ngx_syslog.c" />
     <ClCompile Include="event\ngx_event_openssl_stapling.c" />
     <ClCompile Include="http\modules\ngx_http_auth_request_module.c" />
     <ClCompile Include="http\modules\ngx_http_gunzip_filter_module.c" />
     <ClCompile Include="http\modules\ngx_http_limit_conn_module.c" />
     <ClCompile Include="http\modules\ngx_http_mp4_module.c" />
+    <ClCompile Include="http\modules\ngx_http_hello_module.c" />
+    <ClCompile Include="http\modules\ngx_http_upstream_hash_module.c" />
     <ClCompile Include="http\modules\ngx_http_upstream_keepalive_module.c" />
     <ClCompile Include="http\modules\ngx_http_upstream_least_conn_module.c" />
     <ClCompile Include="http\ngx_http_spdy.c" />
@@ -265,7 +268,6 @@
     <ClCompile Include="event\ngx_event_acceptex.c" />
     <ClCompile Include="event\ngx_event_busy_lock.c" />
     <ClCompile Include="event\ngx_event_connect.c" />
-    <ClCompile Include="event\ngx_event_mutex.c" />
     <ClCompile Include="event\ngx_event_pipe.c" />
     <ClCompile Include="event\ngx_event_posted.c" />
     <ClCompile Include="event\ngx_event_timer.c" />
@@ -388,6 +390,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\ngx_proxy_protocol.h" />
+    <ClInclude Include="core\ngx_syslog.h" />
     <ClInclude Include="event\ngx_event_connect.h" />
     <ClInclude Include="event\ngx_event_openssl.h" />
     <ClInclude Include="http\ngx_http_spdy.h" />

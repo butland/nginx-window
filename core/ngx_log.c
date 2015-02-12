@@ -91,8 +91,9 @@ ngx_log_error_core(ngx_uint_t level, ngx_log_t *log, ngx_err_t err,
     va_list      args;
 #endif
     u_char      *p, *last, *msg;
-    u_char       errstr[NGX_MAX_ERROR_STR];
+    ssize_t      n;
     ngx_uint_t   wrote_stderr, debug_connection;
+    u_char       errstr[NGX_MAX_ERROR_STR];
 
     last = errstr + NGX_MAX_ERROR_STR;
 
@@ -148,11 +149,33 @@ ngx_log_error_core(ngx_uint_t level, ngx_log_t *log, ngx_err_t err,
             break;
         }
 
-        (void) ngx_write_fd(log->file->fd, errstr, p - errstr);
+        if (log->writer) {
+            log->writer(log, level, errstr, p - errstr);
+            goto next;
+        }
+
+        if (ngx_time() == log->disk_full_time) {
+
+            /*
+             * on FreeBSD writing to a full filesystem with enabled softupdates
+             * may block process for much longer time than writing to non-full
+             * filesystem, so we skip writing to a log for one second
+             */
+
+            goto next;
+        }
+
+        n = ngx_write_fd(log->file->fd, errstr, p - errstr);
+
+        if (n == -1 && ngx_errno == NGX_ENOSPC) {
+            log->disk_full_time = ngx_time();
+        }
 
         if (log->file->fd == ngx_stderr) {
             wrote_stderr = 1;
         }
+
+    next:
 
         log = log->next;
     }
@@ -366,15 +389,35 @@ ngx_log_init(u_char *prefix)
 ngx_int_t
 ngx_log_open_default(ngx_cycle_t *cycle)
 {
-    static ngx_str_t  error_log = ngx_string(NGX_ERROR_LOG_PATH);
+    ngx_log_t         *log;
+    static ngx_str_t   error_log = ngx_string(NGX_ERROR_LOG_PATH);
 
-    if (cycle->new_log.file == NULL) {
-        cycle->new_log.file = ngx_conf_open_file(cycle, &error_log);
-        if (cycle->new_log.file == NULL) {
+    if (ngx_log_get_file_log(&cycle->new_log) != NULL) {
+        return NGX_OK;
+    }
+
+    if (cycle->new_log.log_level != 0) {
+        /* there are some error logs, but no files */
+
+        log = ngx_pcalloc(cycle->pool, sizeof(ngx_log_t));
+        if (log == NULL) {
             return NGX_ERROR;
         }
 
-        cycle->new_log.log_level = NGX_LOG_ERR;
+    } else {
+        /* no error logs at all */
+        log = &cycle->new_log;
+    }
+
+    log->log_level = NGX_LOG_ERR;
+
+    log->file = ngx_conf_open_file(cycle, &error_log);
+    if (log->file == NULL) {
+        return NGX_ERROR;
+    }
+
+    if (log != &cycle->new_log) {
+        ngx_log_insert(&cycle->new_log, log);
     }
 
     return NGX_OK;
@@ -390,7 +433,8 @@ ngx_log_redirect_stderr(ngx_cycle_t *cycle)
         return NGX_OK;
     }
 
-    fd = cycle->log->file->fd;
+    /* file log always exists when we are called */
+    fd = ngx_log_get_file_log(cycle->log)->file->fd;
 
     if (fd != ngx_stderr) {
         if (ngx_set_stderr(fd) == NGX_FILE_ERROR) {
@@ -402,6 +446,21 @@ ngx_log_redirect_stderr(ngx_cycle_t *cycle)
     }
 
     return NGX_OK;
+}
+
+
+ngx_log_t *
+ngx_log_get_file_log(ngx_log_t *head)
+{
+    ngx_log_t  *log;
+
+    for (log = head; log; log = log->next) {
+        if (log->file != NULL) {
+            return log;
+        }
+    }
+
+    return NULL;
 }
 
 
@@ -482,8 +541,9 @@ ngx_error_log(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 char *
 ngx_log_set_log(ngx_conf_t *cf, ngx_log_t **head)
 {
-    ngx_log_t  *new_log;
-    ngx_str_t  *value, name;
+    ngx_log_t          *new_log;
+    ngx_str_t          *value, name;
+    ngx_syslog_peer_t  *peer;
 
     if (*head != NULL && (*head)->log_level == 0) {
         new_log = *head;
@@ -506,13 +566,30 @@ ngx_log_set_log(ngx_conf_t *cf, ngx_log_t **head)
         ngx_str_null(&name);
         cf->cycle->log_use_stderr = 1;
 
-    } else {
-        name = value[1];
-    }
+        new_log->file = ngx_conf_open_file(cf->cycle, &name);
+        if (new_log->file == NULL) {
+            return NGX_CONF_ERROR;
+        }
 
-    new_log->file = ngx_conf_open_file(cf->cycle, &name);
-    if (new_log->file == NULL) {
-        return NGX_CONF_ERROR;
+
+     } else if (ngx_strncmp(value[1].data, "syslog:", 7) == 0) {
+        peer = ngx_pcalloc(cf->pool, sizeof(ngx_syslog_peer_t));
+        if (peer == NULL) {
+            return NGX_CONF_ERROR;
+        }
+
+        if (ngx_syslog_process_conf(cf, peer) != NGX_CONF_OK) {
+            return NGX_CONF_ERROR;
+        }
+
+        new_log->writer = ngx_syslog_writer;
+        new_log->wdata = peer;
+
+    } else {
+        new_log->file = ngx_conf_open_file(cf->cycle, &value[1]);
+        if (new_log->file == NULL) {
+            return NGX_CONF_ERROR;
+        }
     }
 
     if (ngx_log_set_levels(cf, new_log) != NGX_CONF_OK) {

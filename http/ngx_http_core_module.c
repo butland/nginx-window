@@ -1245,10 +1245,8 @@ ngx_http_core_try_files_phase(ngx_http_request_t *r,
         if (!alias) {
             reserve = len > r->uri.len ? len - r->uri.len : 0;
 
-#if (NGX_PCRE)
-        } else if (clcf->regex) {
+        } else if (alias == NGX_MAX_SIZE_T_VALUE) {
             reserve = len;
-#endif
 
         } else {
             reserve = len > r->uri.len - alias ? len - (r->uri.len - alias) : 0;
@@ -1355,7 +1353,7 @@ ngx_http_core_try_files_phase(ngx_http_request_t *r,
             continue;
         }
 
-        if (of.is_dir && !test_dir) {
+        if (of.is_dir != test_dir) {
             continue;
         }
 
@@ -1365,13 +1363,12 @@ ngx_http_core_try_files_phase(ngx_http_request_t *r,
         if (!alias) {
             r->uri = path;
 
-#if (NGX_PCRE)
-        } else if (clcf->regex) {
+        } else if (alias == NGX_MAX_SIZE_T_VALUE) {
             if (!test_dir) {
                 r->uri = path;
                 r->add_uri_to_alias = 1;
             }
-#endif
+
         } else {
             r->uri.len = alias + path.len;
             r->uri.data = ngx_pnalloc(r->pool, r->uri.len);
@@ -1840,6 +1837,7 @@ ngx_http_set_etag(ngx_http_request_t *r)
 
     etag->value.data = ngx_pnalloc(r->pool, NGX_OFF_T_LEN + NGX_TIME_T_LEN + 3);
     if (etag->value.data == NULL) {
+        etag->hash = 0;
         return NGX_ERROR;
     }
 
@@ -1851,6 +1849,46 @@ ngx_http_set_etag(ngx_http_request_t *r)
     r->headers_out.etag = etag;
 
     return NGX_OK;
+}
+
+
+void
+ngx_http_weak_etag(ngx_http_request_t *r)
+{
+    size_t            len;
+    u_char           *p;
+    ngx_table_elt_t  *etag;
+
+    etag = r->headers_out.etag;
+
+    if (etag == NULL) {
+        return;
+    }
+
+    if (etag->value.len > 2
+        && etag->value.data[0] == 'W'
+        && etag->value.data[1] == '/')
+    {
+        return;
+    }
+
+    if (etag->value.len < 1 || etag->value.data[0] != '"') {
+        r->headers_out.etag->hash = 0;
+        r->headers_out.etag = NULL;
+        return;
+    }
+
+    p = ngx_pnalloc(r->pool, etag->value.len + 2);
+    if (p == NULL) {
+        r->headers_out.etag->hash = 0;
+        r->headers_out.etag = NULL;
+        return;
+    }
+
+    len = ngx_sprintf(p, "W/%V", &etag->value) - p;
+
+    etag->value.data = p;
+    etag->value.len = len;
 }
 
 
@@ -1935,6 +1973,10 @@ ngx_http_send_response(ngx_http_request_t *r, ngx_uint_t status,
 ngx_int_t
 ngx_http_send_header(ngx_http_request_t *r)
 {
+    if (r->post_action) {
+        return NGX_OK;
+    }
+
     if (r->header_sent) {
         ngx_log_error(NGX_LOG_ALERT, r->connection->log, 0,
                       "header already sent");
@@ -2006,16 +2048,12 @@ ngx_http_map_uri_to_path(ngx_http_request_t *r, ngx_str_t *path,
 
     } else {
 
-#if (NGX_PCRE)
-        ngx_uint_t  captures;
+        if (alias == NGX_MAX_SIZE_T_VALUE) {
+            reserved += r->add_uri_to_alias ? r->uri.len + 1 : 1;
 
-        captures = alias && clcf->regex;
-
-        reserved += captures ? r->add_uri_to_alias ? r->uri.len + 1 : 1
-                             : r->uri.len - alias + 1;
-#else
-        reserved += r->uri.len - alias + 1;
-#endif
+        } else {
+            reserved += r->uri.len - alias + 1;
+        }
 
         if (ngx_http_script_run(r, path, clcf->root_lengths->elts, reserved,
                                 clcf->root_values->elts)
@@ -2033,8 +2071,7 @@ ngx_http_map_uri_to_path(ngx_http_request_t *r, ngx_str_t *path,
         *root_length = path->len - reserved;
         last = path->data + *root_length;
 
-#if (NGX_PCRE)
-        if (captures) {
+        if (alias == NGX_MAX_SIZE_T_VALUE) {
             if (!r->add_uri_to_alias) {
                 *last = '\0';
                 return last;
@@ -2042,7 +2079,6 @@ ngx_http_map_uri_to_path(ngx_http_request_t *r, ngx_str_t *path,
 
             alias = 0;
         }
-#endif
     }
 
     last = ngx_cpystrn(last, r->uri.data + alias, r->uri.len - alias + 1);
@@ -2324,7 +2360,7 @@ ngx_http_gzip_accept_encoding(ngx_str_t *ae)
     p += 4;
 
     while (p < last) {
-        switch(*p++) {
+        switch (*p++) {
         case ',':
             return NGX_OK;
         case ';':
@@ -2341,7 +2377,7 @@ ngx_http_gzip_accept_encoding(ngx_str_t *ae)
 quantity:
 
     while (p < last) {
-        switch(*p++) {
+        switch (*p++) {
         case 'q':
         case 'Q':
             goto equal;
@@ -4476,6 +4512,7 @@ ngx_http_core_root(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
 #if (NGX_PCRE)
     if (alias && clcf->regex) {
+        clcf->alias = NGX_MAX_SIZE_T_VALUE;
         n = 1;
     }
 #endif
@@ -4797,7 +4834,8 @@ ngx_http_core_try_files(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
         tf[i].name = value[i + 1];
 
         if (tf[i].name.len > 0
-            && tf[i].name.data[tf[i].name.len - 1] == '/')
+            && tf[i].name.data[tf[i].name.len - 1] == '/'
+            && i + 2 < cf->args->nelts)
         {
             tf[i].test_dir = 1;
             tf[i].name.len--;
