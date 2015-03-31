@@ -156,9 +156,6 @@
     <ClCompile Include="event\ngx_event_acceptex.c">
       <Filter>event</Filter>
     </ClCompile>
-    <ClCompile Include="event\ngx_event_busy_lock.c">
-      <Filter>event</Filter>
-    </ClCompile>
     <ClCompile Include="event\ngx_event_connect.c">
       <Filter>event</Filter>
     </ClCompile>
@@ -235,9 +232,6 @@
       <Filter>os\win32</Filter>
     </ClCompile>
     <ClCompile Include="http\ngx_http.c">
-      <Filter>http</Filter>
-    </ClCompile>
-    <ClCompile Include="http\ngx_http_busy_lock.c">
       <Filter>http</Filter>
     </ClCompile>
     <ClCompile Include="http\ngx_http_copy_filter_module.c">
@@ -1007,9 +1001,6 @@
     <ClInclude Include="event\ngx_event.h">
       <Filter>event</Filter>
     </ClInclude>
-    <ClInclude Include="event\ngx_event_busy_lock.h">
-      <Filter>event</Filter>
-    </ClInclude>
     <ClInclude Include="event\ngx_event_pipe.h">
       <Filter>event</Filter>
     </ClInclude>
@@ -1062,9 +1053,6 @@
       <Filter>os\win32</Filter>
     </ClInclude>
     <ClInclude Include="http\ngx_http.h">
-      <Filter>http</Filter>
-    </ClInclude>
-    <ClInclude Include="http\ngx_http_busy_lock.h">
       <Filter>http</Filter>
     </ClInclude>
     <ClInclude Include="http\ngx_http_cache.h">

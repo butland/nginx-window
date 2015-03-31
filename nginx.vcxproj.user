@@ -3,6 +3,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerWorkingDirectory>.\Debug</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments> -c ./debug/conf/nginx.conf</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments> -c  ./conf/nginx.conf</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
 </Project>

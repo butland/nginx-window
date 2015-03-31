@@ -266,7 +266,6 @@
     <ClCompile Include="event\ngx_event.c" />
     <ClCompile Include="event\ngx_event_accept.c" />
     <ClCompile Include="event\ngx_event_acceptex.c" />
-    <ClCompile Include="event\ngx_event_busy_lock.c" />
     <ClCompile Include="event\ngx_event_connect.c" />
     <ClCompile Include="event\ngx_event_pipe.c" />
     <ClCompile Include="event\ngx_event_posted.c" />
@@ -293,7 +292,6 @@
     <ClCompile Include="os\win32\ngx_wsasend.c" />
     <ClCompile Include="os\win32\ngx_wsasend_chain.c" />
     <ClCompile Include="http\ngx_http.c" />
-    <ClCompile Include="http\ngx_http_busy_lock.c" />
     <ClCompile Include="http\ngx_http_copy_filter_module.c" />
     <ClCompile Include="http\ngx_http_core_module.c" />
     <ClCompile Include="http\ngx_http_file_cache.c" />
@@ -555,7 +553,6 @@
     <ClInclude Include="core\ngx_string.h" />
     <ClInclude Include="core\ngx_times.h" />
     <ClInclude Include="event\ngx_event.h" />
-    <ClInclude Include="event\ngx_event_busy_lock.h" />
     <ClInclude Include="event\ngx_event_pipe.h" />
     <ClInclude Include="event\ngx_event_posted.h" />
     <ClInclude Include="event\ngx_event_timer.h" />
@@ -574,7 +571,6 @@
     <ClInclude Include="os\win32\ngx_user.h" />
     <ClInclude Include="os\win32\ngx_win32_config.h" />
     <ClInclude Include="http\ngx_http.h" />
-    <ClInclude Include="http\ngx_http_busy_lock.h" />
     <ClInclude Include="http\ngx_http_cache.h" />
     <ClInclude Include="http\ngx_http_config.h" />
     <ClInclude Include="http\ngx_http_core_module.h" />
