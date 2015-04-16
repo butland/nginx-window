@@ -7,6 +7,6 @@ nginx for window ,支持ngx_lua,redis,mysql,memcached,主要提供window上本�
 
 个人站的话也可以考虑使用。
 
-nginx版本为1.7.11
+nginx版本为1.7.12
 
 ngx_lua版本为0.9.13
