@@ -52,6 +52,9 @@
     <Filter Include="cjson">
       <UniqueIdentifier>{a9662eaa-0e40-4fbf-962e-f54d020ce293}</UniqueIdentifier>
     </Filter>
+    <Filter Include="stream">
+      <UniqueIdentifier>{0212faa3-f644-4698-bbe5-27f712135fe9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ngx_modules.c">
@@ -897,6 +900,39 @@
     <ClCompile Include="http\modules\ngx_http_upstream_hash_module.c">
       <Filter>http\modules</Filter>
     </ClCompile>
+    <ClCompile Include="stream\ngx_stream.c">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="stream\ngx_stream_core_module.c">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="stream\ngx_stream_handler.c">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="stream\ngx_stream_proxy_module.c">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="stream\ngx_stream_ssl_module.c">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="stream\ngx_stream_upstream.c">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="stream\ngx_stream_upstream_hash_module.c">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="stream\ngx_stream_upstream_least_conn_module.c">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="stream\ngx_stream_upstream_round_robin.c">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="stream\ngx_stream_upstream_zone_module.c">
+      <Filter>stream</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ngx_rwlock.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ngx_auto_config.h">
@@ -1544,11 +1580,27 @@
     <ClInclude Include="core\ngx_syslog.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="stream\ngx_stream.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="stream\ngx_stream_ssl_module.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="stream\ngx_stream_upstream.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="stream\ngx_stream_upstream_round_robin.h">
+      <Filter>stream</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ngx_rwlock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="os\win32\nginx.ico">
       <Filter>os\win32</Filter>
     </None>
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="os\win32\nginx.rc">

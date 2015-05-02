@@ -13,6 +13,13 @@ extern ngx_module_t  ngx_iocp_module;
 extern ngx_module_t  ngx_select_module;
 extern ngx_module_t  ngx_openssl_module;
 extern ngx_module_t  ngx_regex_module;
+extern ngx_module_t  ngx_stream_module;
+extern ngx_module_t  ngx_stream_core_module;
+extern ngx_module_t  ngx_stream_proxy_module;
+extern ngx_module_t  ngx_stream_ssl_module;
+extern ngx_module_t  ngx_stream_upstream_hash_module;
+extern ngx_module_t  ngx_stream_upstream_least_conn_module;
+extern ngx_module_t  ngx_stream_upstream_zone_module;
 extern ngx_module_t  ngx_http_module;
 extern ngx_module_t  ngx_http_core_module;
 extern ngx_module_t  ngx_http_log_module;
@@ -68,6 +75,13 @@ ngx_module_t *ngx_modules[] = {
     &ngx_select_module,
     &ngx_openssl_module,
     &ngx_regex_module,
+	&ngx_stream_module,
+    &ngx_stream_core_module,
+    &ngx_stream_proxy_module,
+    &ngx_stream_ssl_module,
+    &ngx_stream_upstream_hash_module,
+    &ngx_stream_upstream_least_conn_module,
+    &ngx_stream_upstream_zone_module,
     &ngx_http_module,
     &ngx_http_core_module,
     &ngx_http_log_module,

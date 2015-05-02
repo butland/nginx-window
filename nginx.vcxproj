@@ -55,7 +55,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>./lua-cjson-2.1.0/src;./LuaJIT-2.1/src;./LuaJIT-2.1/src/host;./libiconv-1.9.1.bin.woe32/include;./lua-nginx-module-0.9.13/src/api;./lua-nginx-module-0.9.13/src;.;./pcre-8.12;./zlib;./core;./os/win32;./event;./event/modules;./http;./http/modules;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./stream;./lua-cjson-2.1.0/src;./LuaJIT-2.1/src;./LuaJIT-2.1/src/host;./libiconv-1.9.1.bin.woe32/include;./lua-nginx-module-0.9.13/src/api;./lua-nginx-module-0.9.13/src;.;./pcre-8.12;./zlib;./core;./os/win32;./event;./event/modules;./http;./http/modules;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;HAVE_CONFIG_H;NO_SYS_TYPES_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -102,6 +102,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="core\ngx_proxy_protocol.c" />
+    <ClCompile Include="core\ngx_rwlock.c" />
     <ClCompile Include="core\ngx_syslog.c" />
     <ClCompile Include="event\ngx_event_openssl_stapling.c" />
     <ClCompile Include="http\modules\ngx_http_auth_request_module.c" />
@@ -346,6 +347,18 @@
     <ClCompile Include="http\modules\ngx_http_upstream_ip_hash_module.c" />
     <ClCompile Include="http\modules\ngx_http_userid_filter_module.c" />
     <ClCompile Include="http\modules\ngx_http_uwsgi_module.c" />
+    <ClCompile Include="stream\ngx_stream.c">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">./stream;./lua-cjson-2.1.0/src;./LuaJIT-2.1/src;./LuaJIT-2.1/src/host;./libiconv-1.9.1.bin.woe32/include;./lua-nginx-module-0.9.13/src/api;./lua-nginx-module-0.9.13/src;.;./pcre-8.12;./zlib;./core;./os/win32;./event;./event/modules;./http;./http/modules;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="stream\ngx_stream_core_module.c" />
+    <ClCompile Include="stream\ngx_stream_handler.c" />
+    <ClCompile Include="stream\ngx_stream_proxy_module.c" />
+    <ClCompile Include="stream\ngx_stream_ssl_module.c" />
+    <ClCompile Include="stream\ngx_stream_upstream.c" />
+    <ClCompile Include="stream\ngx_stream_upstream_hash_module.c" />
+    <ClCompile Include="stream\ngx_stream_upstream_least_conn_module.c" />
+    <ClCompile Include="stream\ngx_stream_upstream_round_robin.c" />
+    <ClCompile Include="stream\ngx_stream_upstream_zone_module.c" />
     <ClCompile Include="zlib\adler32.c" />
     <ClCompile Include="zlib\compress.c" />
     <ClCompile Include="zlib\crc32.c" />
@@ -388,6 +401,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\ngx_proxy_protocol.h" />
+    <ClInclude Include="core\ngx_rwlock.h" />
     <ClInclude Include="core\ngx_syslog.h" />
     <ClInclude Include="event\ngx_event_connect.h" />
     <ClInclude Include="event\ngx_event_openssl.h" />
@@ -581,6 +595,10 @@
     <ClInclude Include="http\ngx_http_variables.h" />
     <ClInclude Include="http\modules\ngx_http_ssi_filter_module.h" />
     <ClInclude Include="http\modules\ngx_http_ssl_module.h" />
+    <ClInclude Include="stream\ngx_stream.h" />
+    <ClInclude Include="stream\ngx_stream_ssl_module.h" />
+    <ClInclude Include="stream\ngx_stream_upstream.h" />
+    <ClInclude Include="stream\ngx_stream_upstream_round_robin.h" />
     <ClInclude Include="zlib\crc32.h" />
     <ClInclude Include="zlib\deflate.h" />
     <ClInclude Include="zlib\gzguts.h" />
@@ -605,6 +623,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="os\win32\nginx.ico" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="os\win32\nginx.rc" />
