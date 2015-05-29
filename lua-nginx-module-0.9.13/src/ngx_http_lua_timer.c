@@ -357,7 +357,7 @@ ngx_http_lua_timer_handler(ngx_event_t *ev)
 
 #if defined(nginx_version) && nginx_version >= 1003014
 
-    ngx_http_set_connection_log(r->connection, clcf->error_log);
+    ngx_set_connection_log(r->connection, clcf->error_log);
 
 #else
 

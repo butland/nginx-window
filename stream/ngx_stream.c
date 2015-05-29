@@ -393,13 +393,7 @@ ngx_stream_optimize_servers(ngx_conf_t *cf, ngx_array_t *ports)
 
             ls->servers = stport;
 
-            if (i == last - 1) {
-                stport->naddrs = last;
-
-            } else {
-                stport->naddrs = 1;
-                i = 0;
-            }
+            stport->naddrs = i + 1;
 
             switch (ls->sockaddr->sa_family) {
 #if (NGX_HAVE_INET6)
@@ -414,6 +408,10 @@ ngx_stream_optimize_servers(ngx_conf_t *cf, ngx_array_t *ports)
                     return NGX_CONF_ERROR;
                 }
                 break;
+            }
+
+            if (ngx_clone_listening(cf, ls) != NGX_OK) {
+                return NGX_CONF_ERROR;
             }
 
             addr++;

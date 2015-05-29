@@ -1719,13 +1719,7 @@ ngx_http_init_listening(ngx_conf_t *cf, ngx_http_conf_port_t *port)
 
         ls->servers = hport;
 
-        if (i == last - 1) {
-            hport->naddrs = last;
-
-        } else {
-            hport->naddrs = 1;
-            i = 0;
-        }
+        hport->naddrs = i + 1;
 
         switch (ls->sockaddr->sa_family) {
 
@@ -1741,6 +1735,10 @@ ngx_http_init_listening(ngx_conf_t *cf, ngx_http_conf_port_t *port)
                 return NGX_ERROR;
             }
             break;
+        }
+
+        if (ngx_clone_listening(cf, ls) != NGX_OK) {
+            return NGX_ERROR;
         }
 
         addr++;
@@ -1819,6 +1817,10 @@ ngx_http_add_listening(ngx_conf_t *cf, ngx_http_conf_addr_t *addr)
 
 #if (NGX_HAVE_TCP_FASTOPEN)
     ls->fastopen = addr->opt.fastopen;
+#endif
+
+#if (NGX_HAVE_REUSEPORT)
+    ls->reuseport = addr->opt.reuseport;
 #endif
 
     return ls;

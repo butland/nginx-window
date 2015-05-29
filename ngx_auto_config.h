@@ -199,3 +199,9 @@
 #define NGX_GROUP  ""
 #endif
 
+#ifndef NGX_STREAM_SSL
+#define NGX_STREAM_SSL 1
+#endif
+
+#define NGX_STREAM_UPSTREAM_ZONE 1
+

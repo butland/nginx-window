@@ -227,7 +227,7 @@ ngx_http_lua_init_worker(ngx_cycle_t *cycle)
 
 #if defined(nginx_version) && nginx_version >= 1003014
 
-    ngx_http_set_connection_log(r->connection, clcf->error_log);
+    ngx_set_connection_log(r->connection, clcf->error_log);
 
 #else
 
